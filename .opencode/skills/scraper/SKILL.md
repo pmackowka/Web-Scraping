@@ -21,12 +21,12 @@ Jeśli plik nie istnieje lub nie zawiera `APIFY_API_TOKEN`:
 ### Krok 2: Uruchom skrypt
 
 ```
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "Google Analytics 4" "Google Tag Manager" -m 5 -t Top
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" -m 10 -t Top
 ```
 
 **Opcjonalne parametry:**
-- `-q` --query: hasło wyszukiwania (domyślnie: OpenCode)
-- `-m` --max: maksymalna liczba tweetów na frazę (domyślnie: 5)
+- `-q` --query: hasło wyszukiwania (domyślnie: OpenCode, Cloud Code)
+- `-m` --max: maksymalna liczba tweetów na frazę (domyślnie: 10)
 - `-t` --type: typ wyszukiwania - Top lub Latest (domyślnie: Top)
 
 **Przykładowe wywołania:**
@@ -55,7 +55,7 @@ Otwórz plik i pokaż użytkownikowi W JĘZYKU POLSKIM:
 - Podsumowanie (najważniejsze tematy z tweetów) w języku polskim.
 - Listę tweetów z treściami przetłumaczonymi w całości na język polski. Oprócz samego tłumaczenia, **dla każdego tweeta musisz dopisać krótki kontekst/opis**, używając przedrostka:
 `Co to znaczy: `
-W 2-3 zdaniach wyjaśnij praktyczne znaczenie każdego wpisu - co ta informacja oznacza dla mnie i jak mogę wykorzystać omawiane narzędzia, rozwiązania lub triki w codziennej pracy programistycznej używając OpenCode lub CloudCode. Same suche przetłumaczenie to za mało.
+W 5-6 zdaniach wyjaśnij praktyczne znaczenie każdego wpisu - co ta informacja oznacza dla mnie i jak mogę wykorzystać omawiane narzędzia, rozwiązania lub triki w codziennej pracy programistycznej używając OpenCode lub CloudCode. Same suche przetłumaczenie to za mało.
 
 > [!IMPORTANT]
 > Zanim pokażesz wyniki użytkownikowi, bezwzględnie musisz:
@@ -74,5 +74,5 @@ Użytkownik mówi:
 
 - Jeśli API token nie jest dostępny, poinformuj użytkownika, że musi go podać
 - Skrypt automatycznie szuka OpenCode i CloudCode razem
-- Maksymalnie 5 tweetów na frazę do pobrania (domyślnie)
+- Maksymalnie 10 tweetów na frazę do pobrania (domyślnie)
 - Jeśli actor zwróci błąd, pokaż użytkownikowi komunikat błędu
