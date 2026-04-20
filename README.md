@@ -47,6 +47,10 @@ cp config.example.env .env
 ## Użycie
 
 ```bash
+# Najpierw aktywuj środowisko:
+source venv/bin/activate
+
+# Uruchom skrypt:
 python scrape.py -q "OpenCode" "Cloud Code" -m 5 -t Top
 ```
 
@@ -58,9 +62,8 @@ python scrape.py -q "OpenCode" "Cloud Code" -m 5 -t Top
 ## Wyniki
 
 Wyniki zapisują się w folderze `output/`:
-```
-output/tweets-2026-04-18.md
-```
+- `output/raw-tweets-{YYYY-MM-DD}.md`: Surowe dane (angielski/oryginalny).
+- `output/tweets-{YYYY-MM-DD}.md`: **Ostateczny raport** (przetłumaczony na polski, z komentarzami).
 
 ## Uruchomienie z Open Code
 
@@ -68,4 +71,4 @@ Gdy potrzebujesz pobrać tweety, powiedz:
 - "Pobierz tweety o OpenCode z X"
 - lub "/scraper"
 
-Skrypt automatycznie pobiera tweety dla OpenCode i CloudCode i zapisuje w `output/`.
+Skrypt pobiera tweety dla OpenCode i CloudCode, a agent automatycznie tłumaczy je na język polski i dodaje merytoryczne komentarze w pliku raportu.
