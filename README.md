@@ -47,15 +47,12 @@ cp config.example.env .env
 ## Użycie
 
 ```bash
-python scrape.py -q "OpenCode" -m 20 -t Top
-python scrape.py -q "Cloud Code" -m 20 -t Top
-python scrape.py -q "Google Analytics 4" -m 20 -t Top
-python scrape.py -q "Google Tag Manager" -m 20 -t Top
+python scrape.py -q "OpenCode" "Cloud Code" "Google Analytics 4" "Google Tag Manager" -m 5 -t Top
 ```
 
 ### Parametry:
 - `-q` --query: hasło wyszukiwania (domyślnie: OpenCode)
-- `-m` --max: liczba tweetów (domyślnie: 20)
+- `-m` --max: liczba tweetów na frazę (domyślnie: 5)
 - `-t` --type: Top lub Latest (domyślnie: Top)
 
 ## Wyniki

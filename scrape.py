@@ -145,16 +145,15 @@ def save_to_file(content, filename):
 
 def main():
     parser = argparse.ArgumentParser(description="Pobieranie tweetów z X")
-    parser.add_argument("-q", "--query", default="OpenCode", help="Hasło wyszukiwania")
-    parser.add_argument("-m", "--max", type=int, default=20, help="Maksymalna liczba tweetów")
+    parser.add_argument("-q", "--query", nargs="+", default=["OpenCode"],
+                      help="Hasła wyszukiwania (można podać kilka oddzielonych spacją)")
+    parser.add_argument("-m", "--max", type=int, default=5, help="Maksymalna liczba tweetów na frazę")
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
                       help="Typ wyszukiwania")
 
     args = parser.parse_args()
 
-    keywords = [args.query]
-    if args.query == "OpenCode":
-        keywords = ["OpenCode", "Claude Code"]
+    keywords = args.query
 
     all_markdown = "# Web Scraping - X Tweets\n\n"
     all_markdown += f"*Data pobrania: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n\n"

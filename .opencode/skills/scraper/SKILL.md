@@ -21,12 +21,12 @@ Jeśli plik nie istnieje lub nie zawiera `APIFY_API_TOKEN`:
 ### Krok 2: Uruchom skrypt
 
 ```
-cd /Users/p/Documents/dev/Web-Scraping && python scrape.py -q "OpenCode" -m 20 -t Top
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "Google Analytics 4" "Google Tag Manager" -m 5 -t Top
 ```
 
 **Opcjonalne parametry:**
 - `-q` --query: hasło wyszukiwania (domyślnie: OpenCode)
-- `-m` --max: maksymalna liczba tweetów (domyślnie: 20)
+- `-m` --max: maksymalna liczba tweetów na frazę (domyślnie: 5)
 - `-t` --type: typ wyszukiwania - Top lub Latest (domyślnie: Top)
 
 **Przykładowe wywołania:**
@@ -74,5 +74,5 @@ Użytkownik mówi:
 
 - Jeśli API token nie jest dostępny, poinformuj użytkownika, że musi go podać
 - Skrypt automatycznie szuka OpenCode i CloudCode razem
-- Maksymalnie 20 tweetów do pobrania (domyślnie)
+- Maksymalnie 5 tweetów na frazę do pobrania (domyślnie)
 - Jeśli actor zwróci błąd, pokaż użytkownikowi komunikat błędu
