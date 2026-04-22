@@ -67,8 +67,19 @@ Wyniki zapisują się w folderze `output/`:
 
 ## Uruchomienie z Open Code
 
-Gdy potrzebujesz pobrać tweety, powiedz:
-- "Pobierz tweety o OpenCode z X"
-- lub "/scraper"
+Gdy potrzebujesz pobrać tweety, skopiuj i wyślij agentowi poniższą instrukcję:
 
-Skrypt pobiera tweety dla OpenCode i CloudCode, a agent automatycznie tłumaczy je na język polski i dodaje merytoryczne komentarze w pliku raportu.
+```
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla frazy [WPISZ_FRAZĘ]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'.
+```
+
+### Co robi agent:
+1. Ładuje skill z podanej ścieżki
+2. Sprawdza plik .env i API token
+3. Uruchamia skrypt scrape.py z podanymi parametrami
+4. Pobiera surowe tweety do `output/raw-tweets-{YYYY-MM-DD}.md`
+5. Tłumaczy i formatuje do pliku `output/tweets-{YYYY-MM-DD}.md` z komentarzami w języku polskim
+
+### Ścieżki:
+- **Skill:** `/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md`
+- **Output:** `/Users/p/Documents/dev/Web-Scraping/output/tweets-{YYYY-MM-DD}.md`
