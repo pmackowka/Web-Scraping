@@ -88,7 +88,7 @@ Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/s
 ### Wersja 4: Własne frazy + Full do skopiowania
 
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'.
 ```
 
 ### Co robi agent:
