@@ -72,7 +72,7 @@ Wyniki zapisują się w folderze `output/`:
 
 Polecenie dla agenta:
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
 ```
 
 Komenda bash (do uruchomienia ręcznego):
@@ -84,7 +84,7 @@ cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scr
 
 Polecenie dla agenta:
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
 ```
 
 Komenda bash (do uruchomienia ręcznego):
