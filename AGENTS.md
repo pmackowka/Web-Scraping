@@ -35,6 +35,10 @@ Wszystkie pliki `tweets-*.md` muszą być po polsku (poza nazwami własnymi i da
 
 `seen_tweets.json` przechowuje ID tweetów z poprzednich uruchomień. Uwaga: `.gitignore` blokuje `*.json`, ale `seen_tweets.json` jest tracked — nie dodawaj innych plików JSON do repo.
 
+## Słowa wykluczające
+
+`EXCLUDE_WORDS` w `scrape.py` (linia 36) to lista fraz, które odrzucają tweety spoza kontekstu IT. Jeśli pojawią się nowe fałszywe pozytywy (np. o UFO dla frazy "antegrawity"), dodaj frazę do tej listy. Porównanie jest case-insensitive.
+
 ## Czego nie ma
 
 Brak testów, lintowania, formatowania, typechecka i CI. Nie próbuj uruchamiać `pytest`, `ruff`, `black` itp.

@@ -33,6 +33,16 @@ OUTPUT_DIR = Path(__file__).parent / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
 
+EXCLUDE_WORDS = [
+    "ufo",
+    "extraterrestrial",
+    "alien",
+    "aliens",
+    "area 51",
+    "redstone arsenal",
+    "disclosure",
+]
+
 
 def get_api_token():
     """Pobiera API token z zmiennej środowiskowej lub pliku .env"""
@@ -107,16 +117,19 @@ def scrape_tweets(query, max_items=20, query_type="Top"):
         return []
 
 
-def filter_tweets(items, keyword, min_likes=20):
+def filter_tweets(items, keyword, min_likes=20, exclude_words=None):
     """Filtruje tweety zawierające keyword i mające min_likes polubień"""
     filtered = []
     keyword_lower = keyword.lower()
 
     for item in items:
         text = item.get("text", "")
+        text_lower = text.lower()
         like_count = item.get("likeCount", 0)
-        
-        if keyword_lower in text.lower() and like_count >= min_likes:
+
+        if keyword_lower in text_lower and like_count >= min_likes:
+            if exclude_words and any(excl in text_lower for excl in exclude_words):
+                continue
             filtered.append(item)
 
     print(f"📝 Przefiltrowano: {len(filtered)}/{len(items)} tweetów spełnia kryteria (słowo: '{keyword}', min. {min_likes} ❤️)")
@@ -186,7 +199,7 @@ def main():
 
     for keyword in keywords:
         items = scrape_tweets(keyword, args.max, args.type)
-        filtered = filter_tweets(items, keyword, args.likes)
+        filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS)
         
         # Deduplikacja
         unique_items = []

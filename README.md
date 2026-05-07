@@ -60,6 +60,8 @@ python scrape.py -q "OpenCode" "Cloud Code" -m 5 -t Top
 - `-t` --type: Top lub Latest (domyślnie: Top)
 - `-l` --likes: minimalna liczba polubień (domyślnie: 20)
 
+> **Filtrowanie wykluczające:** Skrypt automatycznie odrzuca tweety zawierające frazy z listy `EXCLUDE_WORDS` (np. UFO, alien). Aby dodać nowe, edytuj stałą w `scrape.py:36`.
+
 ## Wyniki
 
 Wyniki zapisują się w folderze `output/`:
@@ -84,12 +86,12 @@ cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scr
 
 Polecenie dla agenta:
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io, n8n]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, antegrawity, @warpdotdev, Gemini CLI, @stape_io, n8n]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
 ```
 
 Komenda bash (do uruchomienia ręcznego):
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "Gemini CLI" "@stape_io" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "antegrawity" "@warpdotdev" "Gemini CLI" "@stape_io" -m 10 -t Top -l 100
 ```
 
 ### Co robi agent:

@@ -67,6 +67,7 @@ Twoim zadaniem jest przeczytać ten plik, a następnie **utworzyć nowy plik** `
 ## Uwagi
 
 - **Automatyczna deduplikacja**: Skrypt automatycznie pomija duplikaty.
+- **Filtrowanie wykluczające**: Skrypt odrzuca tweety zawierające frazy spoza IT (np. UFO, alien) zdefiniowane w `EXCLUDE_WORDS` w `scrape.py`.
 - **Język**: Cały plik `tweets-*.md` (poza nazwami własnymi i datami systemowymi) musi być po polsku.
 - **Długość komentarza**: Bezwzględnie pilnuj, aby "Co to znaczy" miało 5-6 pełnych zdań.
 - **Jeden plik końcowy**: Nie twórz wielu plików raportów. Wynik końcowy to jeden plik `tweets-{YYYY-MM-DD}.md`.
