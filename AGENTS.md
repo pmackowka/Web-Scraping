@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## Data bieżąca
+
+Przed rozpoczęciem pracy sprawdź aktualną datę:
+```bash
+date +%Y-%m-%d
+```
+Wszystkie pliki wyjściowe używają formatu `raw-tweets-{YYYY-MM-DD}.md` / `tweets-{YYYY-MM-DD}.md`. Data w nazwie pliku musi zgadzać się z dzisiejszą datą — w przeciwnym razie skrypt utworzy plik z inną datą niż agent odczyta.
+
 ## Uruchamianie
 
 Zawsze aktywuj venv przed pracą:
