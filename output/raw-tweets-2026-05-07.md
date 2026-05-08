@@ -24,7 +24,7 @@ Brak tweetów do wyświetlenia.
 ## OpenAI Codex
 
 Brak tweetów do wyświetlenia.
-## antegrawity
+## Antigravity
 
 Brak tweetów do wyświetlenia.
 ## @warpdotdev

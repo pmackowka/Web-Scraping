@@ -45,7 +45,7 @@ Wszystkie pliki `tweets-*.md` muszą być po polsku (poza nazwami własnymi i da
 
 ## Słowa wykluczające
 
-`EXCLUDE_WORDS` w `scrape.py` (linia 36) to lista fraz, które odrzucają tweety spoza kontekstu IT. Jeśli pojawią się nowe fałszywe pozytywy (np. o UFO dla frazy "antegrawity"), dodaj frazę do tej listy. Porównanie jest case-insensitive.
+`EXCLUDE_WORDS` w `scrape.py` (linia 36) to lista fraz, które odrzucają tweety spoza kontekstu IT. Jeśli pojawią się nowe fałszywe pozytywy (np. o UFO dla frazy "Antigravity"), dodaj frazę do tej listy. Porównanie jest case-insensitive.
 
 ## Czego nie ma
 
