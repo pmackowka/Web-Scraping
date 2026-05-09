@@ -68,6 +68,7 @@ Twoim zadaniem jest przeczytać ten plik, a następnie **utworzyć nowy plik** `
 
 - **Automatyczna deduplikacja**: Skrypt automatycznie pomija duplikaty.
 - **Filtrowanie wykluczające**: Skrypt odrzuca tweety zawierające frazy spoza IT (np. UFO, alien) zdefiniowane w `EXCLUDE_WORDS` w `scrape.py`.
+- **Weryfikacja na etapie tłumaczenia**: Mimo filtra EXCLUDE_WORDS w skrypcie, podczas generowania raportu polskiego **dodatkowo zweryfikuj każdy tweet ręcznie** pod kątem treści spoza kontekstu IT (np. UFO, ezoteryka, pseudonauka). Jeśli tweet ewidentnie nie dotyczy IT/programowania — pomiń go w raporcie. Dotyczy to zwłaszcza fraz takich jak "Antigravity", które potencjalnie mogą zwracać wyniki o antygrawitacji fizycznej zamiast narzędzia AI.
 - **Język**: Cały plik `tweets-*.md` (poza nazwami własnymi i datami systemowymi) musi być po polsku.
 - **Długość komentarza**: Bezwzględnie pilnuj, aby "Co to znaczy" miało 5-6 pełnych zdań.
 - **Jeden plik końcowy**: Nie twórz wielu plików raportów. Wynik końcowy to jeden plik `tweets-{YYYY-MM-DD}.md`.

@@ -47,6 +47,15 @@ Wszystkie pliki `tweets-*.md` muszą być po polsku (poza nazwami własnymi i da
 
 `EXCLUDE_WORDS` w `scrape.py` (linia 36) to lista fraz, które odrzucają tweety spoza kontekstu IT. Jeśli pojawią się nowe fałszywe pozytywy (np. o UFO dla frazy "Antigravity"), dodaj frazę do tej listy. Porównanie jest case-insensitive.
 
+## Auto-push do remote
+
+Po utworzeniu plików w `output/` **zawsze**:
+1. Dodaj wszystkie zmienione/nowe pliki do gita (`git add -A`)
+2. Zrób commit z opisem zmian
+3. Wypchnij do remote (`git push`)
+
+Użytkownik czyta raporty z poziomu aplikacji Git na telefonie, więc push musi być wykonany za każdym razem. Dotyczy to też zmian w `AGENTS.md`, `SKILL.md`, `README.md` i `scrape.py` — najpierw wprowadź zmiany, potem commit + push.
+
 ## Czego nie ma
 
 Brak testów, lintowania, formatowania, typechecka i CI. Nie próbuj uruchamiać `pytest`, `ruff`, `black` itp.

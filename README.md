@@ -91,7 +91,7 @@ Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/s
 
 Komenda bash (do uruchomienia ręcznego):
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "Gemini CLI" "@stape_io" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "Gemini CLI" "@stape_io" "n8n" -m 10 -t Top -l 100
 ```
 
 ### Co robi agent:
