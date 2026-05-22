@@ -78,7 +78,7 @@ Projekt ma skonfigurowaną rutynę w chmurze Anthropic — scrapowanie odpala si
 | **Harmonogram** | Poniedziałek, Środa, Piątek o 03:00 Warsaw (01:00 UTC) |
 | **Model** | claude-sonnet-4-6 |
 | **Repozytorium** | github.com/url-git/Web-Scraping |
-| **Frazy** | OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io, n8n |
+| **Frazy** | OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, @stape_io, n8n |
 | **Token Apify** | zapisany w konfiguracji rutyny na serwerach Anthropic |
 | **Zarządzanie** | https://claude.ai/code/routines |
 
