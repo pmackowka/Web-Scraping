@@ -33,6 +33,16 @@ Skill to autorytatywny opis workflow — czytaj go przed generowaniem raportu.
 
 Wszystkie pliki `tweets-*.md` muszą być po polsku (poza nazwami własnymi i datami). Sekcja "Co to znaczy" musi mieć **5-6 pełnych zdań**. To najczęstszy błąd agentów.
 
+## Słowa kluczowe (8 fraz)
+
+Używaj wszystkich 8 fraz w jednym wywołaniu `-q`:
+
+```
+"OpenCode" "Claude Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "@stape_io" "n8n"
+```
+
+> **Uwaga:** "Cloud Code" (Google Cloud IDE extension) był wcześniej literówką zamiast "Claude Code" (Anthropic) — poprawione we wszystkich plikach konfiguracyjnych. Przy każdym scrapingu upewnij się, że używasz "Claude Code", nie "Cloud Code".
+
 ## Flagi CLI `scrape.py`
 
 - `-q` przyjmuje **wiele** słów kluczowych oddzielonych spacją — podawaj wszystkie w jednym wywołaniu, nie uruchamiaj skryptu osobno dla każdego słowa (tworzyłoby duplikaty pliku wyjściowego)

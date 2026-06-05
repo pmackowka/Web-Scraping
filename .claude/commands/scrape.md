@@ -61,7 +61,7 @@ Przeczytaj `/Users/p/Documents/dev/Web-Scraping/output/raw-tweets-{YYYY-MM-DD}.m
 Wygeneruj krótki (3-5 słów) opis głównych trendów z raportu (np. "OpenCode Grok Build, Antigravity 2.0"), następnie:
 
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && git add -A && git commit -m "Scrape tweets for 9 keywords (YYYY-MM-DD) and generate Polish report" && git push
+cd /Users/p/Documents/dev/Web-Scraping && git add -A && git commit -m "Scrape tweets for 8 keywords (YYYY-MM-DD) and generate Polish report" && git push
 ```
 
 (zastąp YYYY-MM-DD dzisiejszą datą z kroku 1)
