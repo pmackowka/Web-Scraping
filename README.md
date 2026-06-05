@@ -51,7 +51,7 @@ cp config.example.env .env
 source venv/bin/activate
 
 # Uruchom skrypt:
-python scrape.py -q "OpenCode" "Cloud Code" -m 5 -t Top
+python scrape.py -q "OpenCode" "Claude Code" -m 5 -t Top
 ```
 
 ### Parametry:
@@ -78,7 +78,7 @@ Projekt ma skonfigurowaną rutynę w chmurze Anthropic — scrapowanie odpala si
 | **Harmonogram** | Poniedziałek, Środa, Piątek o 03:00 Warsaw (01:00 UTC) |
 | **Model** | claude-sonnet-4-6 |
 | **Repozytorium** | github.com/url-git/Web-Scraping |
-| **Frazy** | OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, @stape_io, n8n |
+| **Frazy** | OpenCode, Claude Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, @stape_io, n8n |
 | **Token Apify** | zapisany w konfiguracji rutyny na serwerach Anthropic |
 | **Zarządzanie** | https://claude.ai/code/routines |
 
@@ -113,13 +113,13 @@ Wpisz `/scrape` w Claude Code — polecenie jest zdefiniowane w `.claude/command
 
 Polecenie dla agenta:
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Cloud Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io, n8n]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [OpenCode, Claude Code, OpenRouter, OpenAI Codex, Antigravity, @warpdotdev, Gemini CLI, @stape_io, n8n]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
 ```
 
 ### Z terminala (bash)
 
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "Gemini CLI" "@stape_io" "n8n" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Claude Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "Gemini CLI" "@stape_io" "n8n" -m 10 -t Top -l 100
 ```
 
 ### Parametry `scrape.py`:

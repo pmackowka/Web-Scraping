@@ -20,11 +20,11 @@ Jeśli plik nie istnieje lub nie zawiera `APIFY_API_TOKEN` - poproś użytkownik
 
 ### Krok 2: Uruchom skrypt (TYLKO RAZ)
 
-Jeśli użytkownik nie podał konkretnej frazy - użyj domyślnych: "OpenCode" i "Cloud Code".
+Jeśli użytkownik nie podał konkretnej frazy - użyj domyślnych: "OpenCode" i "Claude Code".
 
 Uruchom skrypt podając wszystkie słowa kluczowe jednocześnie, aby uniknąć tworzenia wielu plików:
 ```
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Claude Code" -m 10 -t Top -l 100
 ```
 
 Jeśli użytkownik podał własną frazę (np. "AI" "machine learning"):
@@ -59,7 +59,7 @@ Twoim zadaniem jest przeczytać ten plik, a następnie **utworzyć nowy plik** `
 
 [Treść tweeta przetłumaczona w całości na język polski]
 
-> **Co to znaczy:** [Tutaj napisz 5-6 ZDAŃ wyjaśniających praktyczne znaczenie tego wpisu. Co ta informacja oznacza dla programisty i jak wykorzystać te narzędzia w codziennej pracy z OpenCode lub CloudCode. Unikaj ogólników.]
+> **Co to znaczy:** [Tutaj napisz 5-6 ZDAŃ wyjaśniających praktyczne znaczenie tego wpisu. Co ta informacja oznacza dla programisty i jak wykorzystać te narzędzia w codziennej pracy z OpenCode lub Claude Code. Unikaj ogólników.]
 
 ---
 ```

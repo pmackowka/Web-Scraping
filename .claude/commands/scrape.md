@@ -16,7 +16,7 @@ cat /Users/p/Documents/dev/Web-Scraping/.env
 ## Krok 2: Uruchom scraping (TYLKO RAZ, wszystkie frazy naraz)
 
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Cloud Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "@stape_io" "n8n" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Claude Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "@stape_io" "n8n" -m 10 -t Top -l 100
 ```
 
 ## Krok 3: Wygeneruj raport po polsku
