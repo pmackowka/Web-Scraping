@@ -184,7 +184,7 @@ def main():
     parser.add_argument("-m", "--max", type=int, default=5, help="Maksymalna liczba tweetów na frazę")
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
                       help="Typ wyszukiwania")
-    parser.add_argument("-l", "--likes", type=int, default=20, help="Minimalna liczba polubień (default: 20)")
+    parser.add_argument("-l", "--likes", type=int, default=200, help="Minimalna liczba polubień (default: 200)")
 
     args = parser.parse_args()
 

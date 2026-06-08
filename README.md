@@ -58,7 +58,7 @@ python scrape.py -q "OpenCode" "Claude Code" -m 5 -t Top
 - `-q` --query: hasło wyszukiwania (domyślnie: OpenCode)
 - `-m` --max: liczba tweetów na frazę (domyślnie: 5)
 - `-t` --type: Top lub Latest (domyślnie: Top)
-- `-l` --likes: minimalna liczba polubień (domyślnie: 20)
+- `-l` --likes: minimalna liczba polubień (domyślnie: 200)
 
 > **Filtrowanie wykluczające:** Skrypt automatycznie odrzuca tweety zawierające frazy z listy `EXCLUDE_WORDS` (np. UFO, alien). Aby dodać nowe, edytuj stałą w `scrape.py:36`.
 
@@ -89,7 +89,7 @@ Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/s
 ### Z terminala (bash)
 
 ```bash
-cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Claude Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "@stape_io" "n8n" -m 10 -t Top -l 100
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "OpenCode" "Claude Code" "OpenRouter" "OpenAI Codex" "Antigravity" "@warpdotdev" "@stape_io" "n8n" -m 10 -t Top -l 200
 ```
 
 ### Parametry `scrape.py`:
