@@ -61,6 +61,8 @@ Twoim zadaniem jest przeczytać ten plik, a następnie **utworzyć nowy plik** `
 
 > **Co to znaczy:** [Tutaj napisz 5-6 ZDAŃ wyjaśniających praktyczne znaczenie tego wpisu. Co ta informacja oznacza dla programisty i jak wykorzystać te narzędzia w codziennej pracy z OpenCode lub Claude Code. Unikaj ogólników.]
 
+[Link do tweeta](URL)
+
 ---
 ```
 
