@@ -78,7 +78,7 @@ Wpisz `/scrape` w Claude Code — polecenie jest zdefiniowane w `.claude/command
 
 Polecenie dla agenta nr 1:
 ```
-Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [Claude Code, OpenRouter, Codex, Antigravity]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
+Korzystając ze Skilla z '/Users/p/Documents/dev/Web-Scraping/.opencode/skills/scraper/SKILL.md', pobierz nowe tweety z serwisu X dla fraz [Claude Code, Codex, Antigravity]. Wynikowy plik markdown zapisz w '/Users/p/Documents/dev/Web-Scraping/output/'. Po zapisaniu plików, dodaj nowe pliki Markdown do repozytorium git, zrób commit i push do GitHuba.
 ```
 
 Polecenie dla agenta nr 2:
