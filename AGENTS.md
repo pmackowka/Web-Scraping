@@ -46,7 +46,7 @@ Używaj wszystkich 8 fraz w jednym wywołaniu `-q`:
 ## Flagi CLI `scrape.py`
 
 - `-q` przyjmuje **wiele** słów kluczowych oddzielonych spacją — podawaj wszystkie w jednym wywołaniu, nie uruchamiaj skryptu osobno dla każdego słowa (tworzyłoby duplikaty pliku wyjściowego)
-- `-l` — minimalna liczba polubień (domyślnie 200)
+- `-l` — minimalna liczba polubień (domyślnie 500)
 - `-t` — `Top` lub `Latest`
 
 ## Deduplikacja
