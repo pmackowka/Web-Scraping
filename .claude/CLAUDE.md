@@ -60,6 +60,12 @@ Sprawdź przed startem: `date +%Y-%m-%d`. Nazwy plików (`raw-tweets-{YYYY-MM-DD
 
 Wszystkie pliki `tweets-*.md` po polsku (poza nazwami własnymi i datami systemowymi). Sekcja „Co to znaczy" musi mieć **5-6 pełnych zdań**. To najczęstszy błąd agentów.
 
+**Zero znaków CJK w polskim tekście.** Modele wstawiają chińskie słowa w środek zdania (`潜在nie`, `warto密切关注`, `czy数据分析`) — znaleziono to w 10 raportach i naprawiono 2026-07-14. Sprawdź przed commitem:
+
+```bash
+grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md   # musi nic nie zwrócić
+```
+
 ## Deduplikacja i filtry
 
 - `seen_tweets.json` przechowuje ID tweetów z poprzednich uruchomień. `.gitignore` blokuje `*.json`, ale ten plik jest tracked — nie dodawaj innych JSON-ów do repo.

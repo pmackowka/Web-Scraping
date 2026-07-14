@@ -286,3 +286,91 @@ openai just killed n8n https://t.co/qFBdhGkY2G
 
 ---
 
+
+# Druga tura — 2026-07-14 17:54
+
+## Claude Code
+
+*Pobrano: 2026-07-14 17:54*
+
+### @viktoroddy
+**Viktor Oddy** | Data: Wed Jul 08 10:46:18 +0000 2026 | ❤️ Polubienia: 4841 | 🔁 552 | 👁 617462
+
+Claude Fable 5 is actually beast for web design
+
+❤️‍🔥 Just recorded a full guide on how to Design &amp; Build Interactive Animated 3D websites with Claude Code + Fable 5 (0 Design + 0 Coding) https://t.co/LRdi79Kygz
+
+[Link do tweeta](https://x.com/viktoroddy/status/2074807281632612449)
+
+---
+
+## Codex
+
+*Pobrano: 2026-07-14 17:55*
+
+### @steipete
+**Peter Steinberger 🦞** | Data: Sat Jul 04 05:26:46 +0000 2026 | ❤️ Polubienia: 7980 | 🔁 370 | 👁 780965
+
+If you think codex sucks at design, try "use imagegen to re-imagine this design and implement that".
+
+[Link do tweeta](https://x.com/steipete/status/2073277317464682723)
+
+---
+
+## n8n
+
+*Pobrano: 2026-07-14 17:55*
+
+### @piyascode9
+**Ai With Piyas** | Data: Thu Dec 18 03:19:34 +0000 2025 | ❤️ Polubienia: 2603 | 🔁 318 | 👁 384251
+
+99% of the AI agent tutorials on YouTube are garbage.
+
+I’ve built 47 agents with n8n and Claude.
+
+Here are the 3 prompts that actually work (and make agent-building simple).
+
+Bookmark this post
+ 🔖 
+Bonus: comment "Agent: and I’ll DM you AI agent system prompt + full guide ↓ https://t.co/MDGyhKodX5
+
+[Link do tweeta](https://x.com/piyascode9/status/2001492506727583874)
+
+---
+
+### @aryanXmahajan
+**Aryan Mahajan** | Data: Tue Sep 02 16:45:44 +0000 2025 | ❤️ Polubienia: 1967 | 🔁 655 | 👁 200077
+
+Nano banana + n8n + Claude = AI Ad Factory
+
+This system pumps out TikTok/FB/IG static ads on autopilot using Google's new image model...
+
+- No writers.
+- No strategists.
+- No $15K+ monthly content teams.
+
+Just endless, high-converting content at scale.
+
+Perfect for e-comm operators & creative agencies.
+
+Here's how it works:
+→ Upload business context into intelligence engine
+→ n8n pulls audience psychology & brand voice patterns
+→ Claude generates content variations across platforms
+→ Auto-formats for LinkedIn, Twitter, newsletters, YouTube
+→ Applies psychological triggers & engagement hooks
+→ Logs performance data back to system for optimization
+
+Built with business intelligence architecture.
+Runs 24/7.
+Perfect voice consistency every time.
+
+Want the complete system?
+
+Like + comment "BANANA" + repost, and I'll DM it to you.
+(must be following)
+
+[Link do tweeta](https://x.com/aryanXmahajan/status/1962919883920080976)
+
+---
+

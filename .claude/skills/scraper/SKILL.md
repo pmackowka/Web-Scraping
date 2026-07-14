@@ -70,6 +70,10 @@ Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy
 ### Zasady
 
 - **Język**: cały plik po polsku, poza nazwami własnymi i datami systemowymi.
+- **Zero znaków CJK**: żadnych chińskich/japońskich znaków w polskim tekście. Modele potrafią wstawić `潜在`, `因为`, `数据分析` w środek zdania — to nawracający błąd, wykryty w 10 raportach. Wyjątek: nazwy własne (np. japoński nick autora tweeta). Kontrola przed commitem:
+  ```bash
+  grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md
+  ```
 - **Weryfikacja treści**: mimo filtra `EXCLUDE_WORDS` w skrypcie sprawdź każdy tweet ręcznie — cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
 - **Jeden plik końcowy**: `tweets-{YYYY-MM-DD}.md`, nie twórz wielu raportów.
 - **Deduplikacja**: robi ją skrypt (`seen_tweets.json`) — nie filtruj ręcznie.

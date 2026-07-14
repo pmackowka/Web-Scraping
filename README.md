@@ -39,14 +39,35 @@ Wynik trafia do `output/`:
 
 **Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z listy `EXCLUDE_WORDS` (UFO, alien itp.). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
 
-## Jak uruchomić raport (etap 2)
+## 🚀 Gotowce — skopiuj, wklej, gotowe
 
-| Narzędzie | Jak |
-|-----------|-----|
-| **Claude Code** | `/scrape` (albo poproś o użycie skilla `scraper`) |
-| **OpenCode** | „Korzystając ze skilla `scraper`, pobierz nowe tweety i zapisz raport w `output/`. Potem commit i push." |
-| **Codex** | To samo — skille widzi przez `.agents/skills` |
-| **Terminal** | `python scrape.py` daje tylko surowy plik; tłumaczenie i komentarze robi agent |
+Pełny przebieg: scraping → raport po polsku → commit → push. Nic więcej nie trzeba dopisywać.
+
+### Claude Code
+
+```
+/scrape
+```
+
+### OpenCode / Codex
+
+```
+Korzystając ze skilla `scraper` (/Users/p/Documents/dev/Web-Scraping/.claude/skills/scraper/SKILL.md), pobierz nowe tweety z serwisu X dla domyślnych fraz. Raport w języku polskim zapisz w /Users/p/Documents/dev/Web-Scraping/output/. Po zapisaniu plików dodaj je do repozytorium git, zrób commit i push do GitHuba.
+```
+
+### Własne frazy (dowolne narzędzie)
+
+```
+Korzystając ze skilla `scraper` (/Users/p/Documents/dev/Web-Scraping/.claude/skills/scraper/SKILL.md), pobierz nowe tweety z serwisu X dla fraz [Claude Code, MCP, dbt]. Raport w języku polskim zapisz w /Users/p/Documents/dev/Web-Scraping/output/. Po zapisaniu plików dodaj je do repozytorium git, zrób commit i push do GitHuba.
+```
+
+### Sam scraping, bez raportu (terminal)
+
+```bash
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py
+```
+
+Daje tylko surowy `raw-tweets-{data}.md` po angielsku — tłumaczenie i komentarze robi agent.
 
 ## Setup multi-agent (Claude Code / Codex / OpenCode)
 
