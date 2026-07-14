@@ -33,6 +33,11 @@ OUTPUT_DIR = Path(__file__).parent / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
 
+# Domyślne frazy — źródło prawdy opisane w .claude/CLAUDE.md ("Parametry kanoniczne")
+DEFAULT_KEYWORDS = ["Claude Code", "Codex", "n8n"]
+
+# Odrzuca tweety spoza kontekstu IT. Porównanie case-insensitive.
+# "disclosure" celowo usunięte — łapało security-tweety o responsible disclosure.
 EXCLUDE_WORDS = [
     "ufo",
     "extraterrestrial",
@@ -40,7 +45,6 @@ EXCLUDE_WORDS = [
     "aliens",
     "area 51",
     "redstone arsenal",
-    "disclosure",
 ]
 
 
@@ -179,11 +183,11 @@ def save_to_file(content, filename):
 
 def main():
     parser = argparse.ArgumentParser(description="Pobieranie tweetów z X")
-    parser.add_argument("-q", "--query", nargs="+", default=["OpenCode"],
-                      help="Hasła wyszukiwania (można podać kilka oddzielonych spacją)")
-    parser.add_argument("-m", "--max", type=int, default=5, help="Maksymalna liczba tweetów na frazę")
+    parser.add_argument("-q", "--query", nargs="+", default=DEFAULT_KEYWORDS,
+                      help=f"Hasła wyszukiwania, wiele naraz (default: {' '.join(DEFAULT_KEYWORDS)})")
+    parser.add_argument("-m", "--max", type=int, default=10, help="Maksymalna liczba tweetów na frazę (default: 10)")
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
-                      help="Typ wyszukiwania")
+                      help="Typ wyszukiwania (default: Top)")
     parser.add_argument("-l", "--likes", type=int, default=500, help="Minimalna liczba polubień (default: 500)")
 
     args = parser.parse_args()

@@ -1,0 +1,88 @@
+---
+name: scraper
+description: Scrapuje tweety z X (Twitter) przez Apify i generuje dzienny raport po polsku w output/tweets-{data}.md. Używaj, gdy użytkownik prosi o pobranie tweetów, scraping X, nowe tweety lub dzienny raport.
+---
+
+# scraper
+
+> [!IMPORTANT]
+> **RAPORT MUSI BYĆ W CAŁOŚCI PO POLSKU.** Sekcja „Co to znaczy" musi mieć **5-6 pełnych zdań**. To najczęstszy błąd agentów.
+
+Autorytatywny opis workflow. Parametry uruchomienia (frazy, próg polubień) są zdefiniowane w `.claude/CLAUDE.md` → sekcja „Parametry kanoniczne" i zaszyte jako domyślne w `scrape.py`. **Nie powtarzaj ich tutaj — wołaj skrypt bez flag.**
+
+## Krok 1: Data i konfiguracja
+
+```bash
+date +%Y-%m-%d
+```
+
+Sprawdź, czy istnieje `.env` z `APIFY_API_TOKEN` (szablon: `config.example.env`). Brak tokena → poproś użytkownika, nie zgaduj.
+
+## Krok 2: Scraping (TYLKO RAZ, wszystkie frazy naraz)
+
+Domyślne frazy i próg polubień:
+
+```bash
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py
+```
+
+Jeśli użytkownik podał własne frazy — wszystkie w jednym `-q`:
+
+```bash
+cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "fraza A" "fraza B"
+```
+
+> Nigdy nie uruchamiaj skryptu osobno dla każdej frazy — każde wywołanie nadpisuje `raw-tweets-{data}.md` i zostaje tylko ostatnia fraza.
+
+Wynik: `output/raw-tweets-{YYYY-MM-DD}.md` (surowe dane po angielsku).
+
+## Krok 3: Raport po polsku
+
+Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy plik** `output/tweets-{YYYY-MM-DD}.md`:
+
+```markdown
+# Web Scraping - X Tweets
+
+*Data pobrania: YYYY-MM-DD HH:MM*
+
+## Podsumowanie
+
+[3-4 zdania o tym, co ciekawego dzieje się w trendach — po polsku.]
+
+---
+
+## [Fraza]
+
+*Pobrano: YYYY-MM-DD HH:MM*
+
+### @użytkownik
+**Nazwa** | Data: [data oryg.] | ❤️ Polubienia: [n] | 🔁 [n] | 👁 [n]
+
+[Treść tweeta przetłumaczona w całości na polski]
+
+> **Co to znaczy:** [5-6 PEŁNYCH ZDAŃ o praktycznym znaczeniu wpisu dla programisty — co z tego wynika i jak wykorzystać narzędzie w codziennej pracy. Bez ogólników.]
+
+[Link do tweeta](URL)
+
+---
+```
+
+### Zasady
+
+- **Język**: cały plik po polsku, poza nazwami własnymi i datami systemowymi.
+- **Weryfikacja treści**: mimo filtra `EXCLUDE_WORDS` w skrypcie sprawdź każdy tweet ręcznie — cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
+- **Jeden plik końcowy**: `tweets-{YYYY-MM-DD}.md`, nie twórz wielu raportów.
+- **Deduplikacja**: robi ją skrypt (`seen_tweets.json`) — nie filtruj ręcznie.
+
+## Krok 4: Commit i push
+
+Push jest obowiązkowy — użytkownik czyta raporty z aplikacji Git na telefonie.
+
+```bash
+cd /Users/p/Documents/dev/Web-Scraping && git add -A && \
+  git commit -m "tweets YYYY-MM-DD: <3-5 słów o głównych trendach>" && git push
+```
+
+## Krok 5: Podsumowanie w czacie
+
+Po pushu pokaż użytkownikowi krótkie podsumowanie: ile tweetów, jakie trendy, ścieżka do raportu.
