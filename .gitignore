@@ -16,6 +16,7 @@ pip-log.txt
 # GCP
 *.json
 !*.example.json
+!seen_tweets.json
 application_default_credentials.json
 ADC.json
 

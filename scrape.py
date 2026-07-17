@@ -7,24 +7,16 @@ import os
 import sys
 import json
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 try:
     from apify_client import ApifyClient
-except ImportError:
-    print("Installing apify-client...")
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "apify-client"])
-    from apify_client import ApifyClient
-
-try:
     from dotenv import load_dotenv
 except ImportError:
-    print("Installing python-dotenv...")
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "python-dotenv"])
-    from dotenv import load_dotenv
+    print("❌ Brak zależności. Aktywuj venv i zainstaluj pakiety:")
+    print("   source venv/bin/activate && pip install -r requirements.txt")
+    sys.exit(1)
 
 load_dotenv()
 
@@ -189,6 +181,8 @@ def main():
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
                       help="Typ wyszukiwania (default: Top)")
     parser.add_argument("-l", "--likes", type=int, default=500, help="Minimalna liczba polubień (default: 500)")
+    parser.add_argument("-d", "--days", type=int, default=7,
+                      help="Okno świeżości w dniach — dokleja 'since:' do zapytania, 0 wyłącza (default: 7)")
 
     args = parser.parse_args()
 
@@ -201,23 +195,25 @@ def main():
     new_seen_ids = set()
     total_new = 0
 
+    # Filtr świeżości: tryb Top bez daty zwraca stare viralowe tweety (płatne per result)
+    since_clause = ""
+    if args.days > 0:
+        since_date = (datetime.now() - timedelta(days=args.days)).strftime("%Y-%m-%d")
+        since_clause = f" since:{since_date}"
+
     for keyword in keywords:
-        items = scrape_tweets(keyword, args.max, args.type)
+        items = scrape_tweets(f"{keyword}{since_clause}", args.max, args.type)
         filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS)
-        
-        # Deduplikacja
+
+        # Deduplikacja — tweet bez ID/URL przechodzi, ale nie trafia do seen
         unique_items = []
         for item in filtered:
             tweet_id = item.get("id") or item.get("url")
-            if tweet_id and tweet_id not in seen_ids and tweet_id not in new_seen_ids:
-                unique_items.append(item)
-                new_seen_ids.add(tweet_id)
-            elif tweet_id:
-                # Tweet już widzieliśmy w tej sesji lub poprzednich
+            if tweet_id in seen_ids or tweet_id in new_seen_ids:
                 continue
-            else:
-                # Brak ID/URL, dodajemy na wszelki wypadek (mało prawdopodobne)
-                unique_items.append(item)
+            unique_items.append(item)
+            if tweet_id:
+                new_seen_ids.add(tweet_id)
 
         total_new += len(unique_items)
         markdown = format_to_markdown(unique_items, keyword)

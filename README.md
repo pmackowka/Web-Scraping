@@ -34,6 +34,7 @@ Wynik trafia do `output/`:
 | `-m` | Maksymalna liczba tweetów na frazę | 10 |
 | `-t` | Typ wyników: `Top` lub `Latest` | Top |
 | `-l` | Minimalna liczba polubień | 500 |
+| `-d` | Okno świeżości w dniach (dokleja `since:` do zapytania), 0 wyłącza | 7 |
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostaje tylko ostatnia fraza.
 

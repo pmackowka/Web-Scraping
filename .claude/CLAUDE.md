@@ -27,7 +27,7 @@ Trzy frazy, jedno wywołanie, próg 500 polubień:
 
 ```bash
 cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && \
-  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 500
+  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 500 -d 7
 ```
 
 To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje ten sam efekt. Jeśli zmieniasz frazy lub próg, zmień je **tutaj i w `scrape.py`**; skill i komenda odsyłają do tego pliku, nie powtarzają wartości.
@@ -38,6 +38,7 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 | `-m` | Maks. tweetów na frazę | 10 |
 | `-t` | `Top` lub `Latest` | Top |
 | `-l` | Minimalna liczba polubień | 500 |
+| `-d` | Okno świeżości w dniach (`since:` w zapytaniu), 0 wyłącza | 7 |
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostanie tylko ostatnia fraza.
 
