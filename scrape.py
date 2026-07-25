@@ -39,6 +39,27 @@ EXCLUDE_WORDS = [
     "redstone arsenal",
 ]
 
+# Odrzuca zakamuflowaną reklamę (engagement bait) — wzorzec "wrzuć komentarz,
+# wyślę Ci szablon/skilla" typowy dla marketerów na X. Dosłowne frazy, jak
+# EXCLUDE_WORDS — łapie tylko najbardziej oczywiste przypadki, parafrazy
+# przechodzą dalej i muszą zostać złapane ręcznie w kroku 3 (patrz SKILL.md).
+AD_BAIT_PHRASES = [
+    "comment and i'll send",
+    "comment below and i'll",
+    "drop a comment and i'll",
+    "reply and i'll send",
+    "dm me and i'll send",
+    "dm me for the",
+    "dm me the word",
+    "i'll dm you the",
+    "i'll send you the",
+    "comment \"guide\"",
+    "comment 'guide'",
+    "comment \"template\"",
+    "comment 'template'",
+    "link in bio",
+]
+
 
 def get_api_token():
     """Pobiera API token z zmiennej środowiskowej lub pliku .env"""
@@ -180,7 +201,7 @@ def main():
     parser.add_argument("-m", "--max", type=int, default=10, help="Maksymalna liczba tweetów na frazę (default: 10)")
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
                       help="Typ wyszukiwania (default: Top)")
-    parser.add_argument("-l", "--likes", type=int, default=500, help="Minimalna liczba polubień (default: 500)")
+    parser.add_argument("-l", "--likes", type=int, default=400, help="Minimalna liczba polubień (default: 400)")
     parser.add_argument("-d", "--days", type=int, default=7,
                       help="Okno świeżości w dniach — dokleja 'since:' do zapytania, 0 wyłącza (default: 7)")
 
@@ -203,7 +224,7 @@ def main():
 
     for keyword in keywords:
         items = scrape_tweets(f"{keyword}{since_clause}", args.max, args.type)
-        filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS)
+        filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS + AD_BAIT_PHRASES)
 
         # Deduplikacja — tweet bez ID/URL przechodzi, ale nie trafia do seen
         unique_items = []

@@ -23,11 +23,11 @@ Uwaga: konfiguracja (uprawnienia, MCP) **nie jest** współdzielona między narz
 
 ## Parametry kanoniczne
 
-Trzy frazy, jedno wywołanie, próg 500 polubień:
+Trzy frazy, jedno wywołanie, próg 400 polubień:
 
 ```bash
 cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && \
-  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 500 -d 7
+  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 400 -d 7
 ```
 
 To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje ten sam efekt. Jeśli zmieniasz frazy lub próg, zmień je **tutaj i w `scrape.py`**; skill i komenda odsyłają do tego pliku, nie powtarzają wartości.
@@ -37,7 +37,7 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 | `-q` | Frazy (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex" "n8n"` |
 | `-m` | Maks. tweetów na frazę | 10 |
 | `-t` | `Top` lub `Latest` | Top |
-| `-l` | Minimalna liczba polubień | 500 |
+| `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (`since:` w zapytaniu), 0 wyłącza | 7 |
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostanie tylko ostatnia fraza.
@@ -72,6 +72,7 @@ grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md   # musi nic nie zwr�
 - `seen_tweets.json` przechowuje ID tweetów z poprzednich uruchomień. `.gitignore` blokuje `*.json`, ale ten plik jest tracked — nie dodawaj innych JSON-ów do repo.
 - `filter_tweets` wymaga **dosłownego** wystąpienia frazy w treści tweeta (case-insensitive) — świadoma decyzja: zero fałszywych pozytywów kosztem części trafień.
 - `EXCLUDE_WORDS` w `scrape.py` odrzuca tweety spoza IT. Nowy fałszywy pozytyw → dopisz frazę do listy.
+- `AD_BAIT_PHRASES` w `scrape.py` odrzuca zakamuflowaną reklamę (engagement bait, np. „comment and I'll send you..."). To tylko siatka na najbardziej oczywiste przypadki — marketerzy parafrazują, więc ostateczna weryfikacja i tak dzieje się ręcznie w kroku 3 skilla `scraper` (patrz `SKILL.md`).
 
 ## Auto-push do remote
 

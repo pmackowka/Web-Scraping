@@ -33,12 +33,12 @@ Wynik trafia do `output/`:
 | `-q` | Frazy wyszukiwania (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex" "n8n"` |
 | `-m` | Maksymalna liczba tweetów na frazę | 10 |
 | `-t` | Typ wyników: `Top` lub `Latest` | Top |
-| `-l` | Minimalna liczba polubień | 500 |
+| `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (dokleja `since:` do zapytania), 0 wyłącza | 7 |
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostaje tylko ostatnia fraza.
 
-**Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z listy `EXCLUDE_WORDS` (UFO, alien itp.). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
+**Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z list `EXCLUDE_WORDS` (UFO, alien itp.) i `AD_BAIT_PHRASES` (zakamuflowana reklama, np. „comment and I'll send you..."). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
 
 ## 🚀 Gotowce — skopiuj, wklej, gotowe
 

@@ -74,7 +74,9 @@ Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy
   ```bash
   grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md
   ```
-- **Weryfikacja treści**: mimo filtra `EXCLUDE_WORDS` w skrypcie sprawdź każdy tweet ręcznie — cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
+- **Weryfikacja treści**: mimo filtrów w skrypcie (`EXCLUDE_WORDS`, `AD_BAIT_PHRASES`) sprawdź każdy tweet ręcznie:
+  - cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
+  - **Zakamuflowana reklama**: pomiń tweety, które łączą wyssane z palca/niepotwierdzone statystyki z wezwaniem do akcji typu „skomentuj X, a wyślę Ci szablon/skilla/przewodnika", „DM po dostęp", „link w bio". Regex w skrypcie łapie tylko dosłowne frazy — marketerzy parafrazują, więc oceniaj po wzorcu (teza brzmi jak lead magnet, nie jak realny insight), nie tylko po słowach kluczowych.
 - **Jeden plik końcowy**: `tweets-{YYYY-MM-DD}.md`, nie twórz wielu raportów.
 - **Deduplikacja**: robi ją skrypt (`seen_tweets.json`) — nie filtruj ręcznie.
 
