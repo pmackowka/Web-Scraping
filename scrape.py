@@ -58,6 +58,8 @@ AD_BAIT_PHRASES = [
     "comment \"template\"",
     "comment 'template'",
     "link in bio",
+    "worth bookmarking",
+    "bookmark this before",
 ]
 
 
