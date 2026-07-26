@@ -6,7 +6,7 @@ description: Scrapuje tweety z X (Twitter) przez Apify i generuje dzienny raport
 # scraper
 
 > [!IMPORTANT]
-> **RAPORT MUSI BYĆ W CAŁOŚCI PO POLSKU.** Sekcja „Co to znaczy" musi mieć **5-6 pełnych zdań**. To najczęstszy błąd agentów.
+> **RAPORT MUSI BYĆ W CAŁOŚCI PO POLSKU.** Sekcja „Co to znaczy" musi mieć **3-4 pełne zdania** — bez sztucznego dopychania objętości. To najczęstszy błąd agentów.
 
 Autorytatywny opis workflow. Parametry uruchomienia (frazy, próg polubień) są zdefiniowane w `.claude/CLAUDE.md` → sekcja „Parametry kanoniczne" i zaszyte jako domyślne w `scrape.py`. **Nie powtarzaj ich tutaj — wołaj skrypt bez flag.**
 
@@ -60,7 +60,7 @@ Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy
 
 [Treść tweeta przetłumaczona w całości na polski]
 
-> **Co to znaczy:** [5-6 PEŁNYCH ZDAŃ o praktycznym znaczeniu wpisu dla programisty — co z tego wynika i jak wykorzystać narzędzie w codziennej pracy. Bez ogólników.]
+> **Co to znaczy:** [3-4 PEŁNE ZDANIA o praktycznym znaczeniu wpisu dla programisty — co z tego wynika i jak wykorzystać narzędzie w codziennej pracy. Bez ogólników i bez naciągania długości: jeśli tweet to luźny komentarz albo żart bez realnej treści, napisz krótko, zamiast dopychać zdaniami-wypełniaczami.]
 
 [Link do tweeta](URL)
 
