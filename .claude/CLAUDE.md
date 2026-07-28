@@ -42,6 +42,31 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostanie tylko ostatnia fraza.
 
+## Opcjonalne Actory Xquik
+
+Domyślny pipeline nadal używa dotychczasowego Actora. Xquik wymaga jawnego wyboru.
+
+- [Xquik X Tweet Scraper](https://apify.com/xquik/x-tweet-scraper)
+- [Xquik X Follower Scraper](https://apify.com/xquik/x-follower-scraper)
+
+Przed uruchomieniem sprawdź aktualne ceny na stronie Actora. Uzyskaj zgodę
+na liczbę uruchomień i limit każdego uruchomienia. Następnie dodaj
+`--provider xquik`, `--max-charge-usd <limit>` i `--approve-cost`.
+Każda fraza tworzy osobne uruchomienie z własnym limitem serwerowym.
+
+`xquik_actors.py` udostępnia wszystkie natywne trasy:
+
+- Tweet: `legacy`, `tweet`, `tweets`, `search`, `profileTweets`,
+  `profileReplies`, `profileMedia`, `profileLikes`, `listTweets`, `article`,
+  `replies`, `quotes`, `thread`, `retweeters`, `favoriters`.
+- Follower: `followers`, `following`, `verified_followers`, `list_members`,
+  `list_followers`, `community_members`.
+
+Nie dodawaj `--approve-cost` bez wyraźnej zgody użytkownika. Nie uruchamiaj
+Actora podczas testów. SDK przekazuje token w nagłówku, nigdy w adresie URL.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
+
 ## Data bieżąca
 
 Sprawdź przed startem: `date +%Y-%m-%d`. Nazwy plików (`raw-tweets-{YYYY-MM-DD}.md`, `tweets-{YYYY-MM-DD}.md`) muszą używać dzisiejszej daty — inaczej agent czyta inny plik, niż skrypt zapisał.

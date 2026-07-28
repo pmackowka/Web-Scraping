@@ -13,14 +13,17 @@ from pathlib import Path
 try:
     from apify_client import ApifyClient
     from dotenv import load_dotenv
+    from xquik_actor_client import (
+        XquikActorError,
+        build_tweet_input,
+        run_xquik_tweets,
+    )
 except ImportError:
     print("❌ Brak zależności. Aktywuj venv i zainstaluj pakiety:")
     print("   source venv/bin/activate && pip install -r requirements.txt")
     sys.exit(1)
 
-load_dotenv()
-
-ACTOR_ID = "kaitoeasyapi/twitter-x-data-tweet-scraper-pay-per-result-cheapest"
+DEFAULT_ACTOR_ID = "kaitoeasyapi/twitter-x-data-tweet-scraper-pay-per-result-cheapest"
 OUTPUT_DIR = Path(__file__).parent / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
@@ -101,10 +104,68 @@ def save_seen_tweets(seen_ids):
         print(f"⚠️ Nie udało się zapisać seen_tweets.json: {e}")
 
 
-def scrape_tweets(query, max_items=20, query_type="Top"):
-    """Pobiera tweety dla danego zapytania"""
-    client = ApifyClient(token=get_api_token())
+def _scrape_with_xquik(
+    query,
+    max_items,
+    query_type,
+    max_total_charge_usd,
+    approved,
+):
+    input_data = build_tweet_input(
+        "search",
+        [query],
+        max_items=max_items,
+        query_type=query_type,
+        output_variant="rich",
+        output_preset="nested",
+        field_style="camelCase",
+    )
+    print(
+        f"🔍 Szukam przez Xquik: "
+        f"'{query}' ({max_items} tweetów, {query_type})..."
+    )
+    try:
+        items = run_xquik_tweets(
+            input_data,
+            max_items=max_items,
+            max_total_charge_usd=max_total_charge_usd,
+            approved=approved,
+        )
+    except XquikActorError:
+        raise
+    except Exception as error:
+        print(f"❌ Błąd podczas pobierania '{query}': {error}")
+        return []
 
+    if not items:
+        print(f"⚠️  Brak wyników w datasecie dla: {query}")
+        return []
+
+    print(f"✅ Pobrano {len(items)} tweetów dla: {query}")
+    return items
+
+
+def scrape_tweets(
+    query,
+    max_items=20,
+    query_type="Top",
+    provider="existing",
+    max_total_charge_usd=None,
+    approved=False,
+):
+    """Pobiera tweety dla danego zapytania"""
+    if provider == "xquik":
+        return _scrape_with_xquik(
+            query,
+            max_items,
+            query_type,
+            max_total_charge_usd,
+            approved,
+        )
+    if provider != "existing":
+        raise ValueError(f"Nieobsługiwany dostawca Actora: {provider}")
+
+    client = ApifyClient(token=get_api_token())
     input_data = {
         "twitterContent": query,
         "maxItems": max_items,
@@ -116,7 +177,7 @@ def scrape_tweets(query, max_items=20, query_type="Top"):
     print(f"🔍 Szukam: '{query}' ({max_items} tweetów, {query_type})...")
 
     try:
-        run = client.actor(ACTOR_ID).call(run_input=input_data)
+        run = client.actor(DEFAULT_ACTOR_ID).call(run_input=input_data)
 
         if not run or not run.get("defaultDatasetId"):
             print(f"⚠️  Brak wyników dla: {query}")
@@ -206,8 +267,29 @@ def main():
     parser.add_argument("-l", "--likes", type=int, default=400, help="Minimalna liczba polubień (default: 400)")
     parser.add_argument("-d", "--days", type=int, default=7,
                       help="Okno świeżości w dniach — dokleja 'since:' do zapytania, 0 wyłącza (default: 7)")
+    parser.add_argument(
+        "--provider",
+        choices=("existing", "xquik"),
+        default="existing",
+        help="Dostawca Actora (default: existing)",
+    )
+    parser.add_argument(
+        "--max-charge-usd",
+        type=float,
+        help="Limit kosztu jednego uruchomienia Xquik",
+    )
+    parser.add_argument(
+        "--approve-cost",
+        action="store_true",
+        help="Potwierdź koszt uruchomień Xquik",
+    )
 
     args = parser.parse_args()
+    if args.provider == "xquik":
+        if args.max_charge_usd is None:
+            parser.error("--provider xquik wymaga --max-charge-usd")
+        if not args.approve_cost:
+            parser.error("--provider xquik wymaga --approve-cost")
 
     keywords = args.query
 
@@ -225,7 +307,17 @@ def main():
         since_clause = f" since:{since_date}"
 
     for keyword in keywords:
-        items = scrape_tweets(f"{keyword}{since_clause}", args.max, args.type)
+        try:
+            items = scrape_tweets(
+                f"{keyword}{since_clause}",
+                args.max,
+                args.type,
+                provider=args.provider,
+                max_total_charge_usd=args.max_charge_usd,
+                approved=args.approve_cost,
+            )
+        except XquikActorError as error:
+            parser.error(str(error))
         filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS + AD_BAIT_PHRASES)
 
         # Deduplikacja — tweet bez ID/URL przechodzi, ale nie trafia do seen

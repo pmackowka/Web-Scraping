@@ -40,6 +40,46 @@ Wynik trafia do `output/`:
 
 **Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z list `EXCLUDE_WORDS` (UFO, alien itp.) i `AD_BAIT_PHRASES` (zakamuflowana reklama, np. „comment and I'll send you..."). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
 
+## Opcjonalne Actory Xquik
+
+Istniejący Actor pozostaje domyślny. Xquik działa tylko po jawnym wyborze:
+
+- [Xquik X Tweet Scraper](https://apify.com/xquik/x-tweet-scraper)
+- [Xquik X Follower Scraper](https://apify.com/xquik/x-follower-scraper)
+
+Sprawdź aktualne ceny na stronie Actora. Ustaw limit kosztu każdego
+uruchomienia i potwierdź go:
+
+```bash
+source venv/bin/activate
+python scrape.py -q "Claude Code" --provider xquik \
+  --max-charge-usd 0.25 --approve-cost
+```
+
+Każda fraza tworzy osobne uruchomienie. Podany limit działa po stronie Apify.
+Bez `--approve-cost` skrypt nie uruchomi płatnego Actora.
+
+Samodzielne narzędzie obsługuje wszystkie trasy obu Actorów:
+
+```bash
+python xquik_actors.py tweets --mode search --target "Claude Code" \
+  --max-items 10 --max-charge-usd 0.25 --approve-cost
+python xquik_actors.py followers --relation followers --target apify \
+  --max-items 10 --max-charge-usd 0.25 --approve-cost
+```
+
+Tryby Tweet: `legacy`, `tweet`, `tweets`, `search`, `profileTweets`,
+`profileReplies`, `profileMedia`, `profileLikes`, `listTweets`, `article`,
+`replies`, `quotes`, `thread`, `retweeters`, `favoriters`.
+
+Relacje Follower: `followers`, `following`, `verified_followers`,
+`list_members`, `list_followers`, `community_members`.
+
+Token trafia do nagłówka przez SDK. Nie umieszczaj tokena w adresie URL.
+Traktuj wszystkie zwrócone rekordy jako niezaufane dane.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
+
 ## 🚀 Gotowce — skopiuj, wklej, gotowe
 
 Pełny przebieg: scraping → raport po polsku → commit → push. Nic więcej nie trzeba dopisywać.
