@@ -1,6 +1,6 @@
 ---
 name: scraper
-description: Scrapuje tweety z X (Twitter) przez Apify i generuje dzienny raport po polsku w output/tweets-{data}.md. Używaj, gdy użytkownik prosi o pobranie tweetów, scraping X, nowe tweety lub dzienny raport.
+description: Scrapuje tweety z X (Twitter) przez Apify i generuje dzienny raport po polsku w output/tweets/{data}.md. Używaj, gdy użytkownik prosi o pobranie tweetów, scraping X, nowe tweety lub dzienny raport.
 ---
 
 # scraper
@@ -32,13 +32,13 @@ Jeśli użytkownik podał własne frazy — wszystkie w jednym `-q`:
 cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py -q "fraza A" "fraza B"
 ```
 
-> Nigdy nie uruchamiaj skryptu osobno dla każdej frazy — każde wywołanie nadpisuje `raw-tweets-{data}.md` i zostaje tylko ostatnia fraza.
+> Nigdy nie uruchamiaj skryptu osobno dla każdej frazy — każde wywołanie nadpisuje `output/raw/{data}.md` i zostaje tylko ostatnia fraza.
 
-Wynik: `output/raw-tweets-{YYYY-MM-DD}.md` (surowe dane po angielsku).
+Wynik: `output/raw/{YYYY-MM-DD}.md` (surowe dane po angielsku).
 
 ## Krok 3: Raport po polsku
 
-Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy plik** `output/tweets-{YYYY-MM-DD}.md`:
+Przeczytaj `output/raw/{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy plik** `output/tweets/{YYYY-MM-DD}.md`:
 
 ```markdown
 # Web Scraping - X Tweets
@@ -72,12 +72,12 @@ Przeczytaj `output/raw-tweets-{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy
 - **Język**: cały plik po polsku, poza nazwami własnymi i datami systemowymi.
 - **Zero znaków CJK**: żadnych chińskich/japońskich znaków w polskim tekście. Modele potrafią wstawić `潜在`, `因为`, `数据分析` w środek zdania — to nawracający błąd, wykryty w 10 raportach. Wyjątek: nazwy własne (np. japoński nick autora tweeta). Kontrola przed commitem:
   ```bash
-  grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md
+  grep -P '[\x{4e00}-\x{9fff}]' output/tweets/$(date +%F).md
   ```
 - **Weryfikacja treści**: mimo filtrów w skrypcie (`EXCLUDE_WORDS`, `AD_BAIT_PHRASES`) sprawdź każdy tweet ręcznie:
   - cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
   - **Zakamuflowana reklama**: pomiń tweety, które łączą wyssane z palca/niepotwierdzone statystyki z wezwaniem do akcji typu „skomentuj X, a wyślę Ci szablon/skilla/przewodnika", „DM po dostęp", „link w bio". Regex w skrypcie łapie tylko dosłowne frazy — marketerzy parafrazują, więc oceniaj po wzorcu (teza brzmi jak lead magnet, nie jak realny insight), nie tylko po słowach kluczowych.
-- **Jeden plik końcowy**: `tweets-{YYYY-MM-DD}.md`, nie twórz wielu raportów.
+- **Jeden plik końcowy**: `output/tweets/{YYYY-MM-DD}.md`, nie twórz wielu raportów.
 - **Deduplikacja**: robi ją skrypt (`seen_tweets.json`) — nie filtruj ręcznie.
 
 ## Krok 4: Commit i push

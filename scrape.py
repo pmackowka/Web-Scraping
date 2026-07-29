@@ -22,7 +22,8 @@ load_dotenv()
 
 ACTOR_ID = "kaitoeasyapi/twitter-x-data-tweet-scraper-pay-per-result-cheapest"
 OUTPUT_DIR = Path(__file__).parent / "output"
-OUTPUT_DIR.mkdir(exist_ok=True)
+RAW_DIR = OUTPUT_DIR / "raw"
+RAW_DIR.mkdir(parents=True, exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
 
 # Domyślne frazy — źródło prawdy opisane w .claude/CLAUDE.md ("Parametry kanoniczne")
@@ -188,9 +189,8 @@ def format_to_markdown(items, keyword):
     return md
 
 
-def save_to_file(content, filename):
-    """Zapisuje treść do pliku"""
-    filepath = OUTPUT_DIR / filename
+def save_to_file(content, filepath):
+    """Zapisuje treść do pliku pod podaną ścieżką"""
     filepath.write_text(content, encoding="utf-8")
     print(f"💾 Zapisano: {filepath}")
     return filepath
@@ -247,13 +247,14 @@ def main():
         # Opcjonalnie: można przerwać zapisywanie pustego pliku, 
         # ale zostawmy to użytkownikowi do decyzji.
         
-    filename = f"raw-tweets-{datetime.now().strftime('%Y-%m-%d')}.md"
-    save_to_file(all_markdown, filename)
-    
+    filename = f"{datetime.now().strftime('%Y-%m-%d')}.md"
+    filepath = RAW_DIR / filename
+    save_to_file(all_markdown, filepath)
+
     # Zapisujemy nowe ID do pliku na przyszłość
     save_seen_tweets(seen_ids.union(new_seen_ids))
 
-    print(f"\n✅ Gotowe! Pobrano unikalnych: {total_new}. Wynik w: {OUTPUT_DIR / filename}")
+    print(f"\n✅ Gotowe! Pobrano unikalnych: {total_new}. Wynik w: {filepath}")
 
 
 if __name__ == "__main__":

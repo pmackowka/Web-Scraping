@@ -40,20 +40,34 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 | `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (`since:` w zapytaniu), 0 wyłącza | 7 |
 
-> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostanie tylko ostatnia fraza.
+> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `output/raw/{data}.md` — zostanie tylko ostatnia fraza.
 
 ## Data bieżąca
 
-Sprawdź przed startem: `date +%Y-%m-%d`. Nazwy plików (`raw-tweets-{YYYY-MM-DD}.md`, `tweets-{YYYY-MM-DD}.md`) muszą używać dzisiejszej daty — inaczej agent czyta inny plik, niż skrypt zapisał.
+Sprawdź przed startem: `date +%Y-%m-%d`. Nazwy plików (`output/raw/{YYYY-MM-DD}.md`, `output/tweets/{YYYY-MM-DD}.md`) muszą używać dzisiejszej daty — inaczej agent czyta inny plik, niż skrypt zapisał.
 
 ## Środowisko
 
 `source venv/bin/activate` przed każdą pracą. Wymagany `.env` z `APIFY_API_TOKEN` (szablon: `config.example.env`) — bez tokena skrypt kończy się błędem. Token trzymamy wyłącznie w `.env`; nigdy nie wklejaj go do plików w repo ani do promptów.
 
+## Struktura output/
+
+Dwa podfoldery, żeby na telefonie w apce Git nie trzeba było przewijać surowych danych obok gotowych raportów:
+
+```
+output/
+├── raw/{YYYY-MM-DD}.md      # surowe dane po angielsku (etap 1, scrape.py)
+└── tweets/{YYYY-MM-DD}.md   # raport po polsku (etap 2, robi go agent)
+```
+
+Nazwa pliku to sama data — folder już mówi, czy to dane surowe czy gotowy raport.
+
+> Data jako nazwa pliku sortuje chronologicznie, ale alfabetycznie rosnąco = najnowszy plik na **dole** listy, nie na górze. Jeśli aplikacja Git na telefonie nie ma opcji sortowania „ostatnio zmienione", to obecnie jedyny sposób na najnowszy raport na górze.
+
 ## Dwuetapowy pipeline
 
-1. `scrape.py` → `output/raw-tweets-{data}.md` — surowe dane po angielsku
-2. Skill `scraper` (`.claude/skills/scraper/SKILL.md`) → `output/tweets-{data}.md` — tłumaczenie + komentarze po polsku
+1. `scrape.py` → `output/raw/{data}.md` — surowe dane po angielsku
+2. Skill `scraper` (`.claude/skills/scraper/SKILL.md`) → `output/tweets/{data}.md` — tłumaczenie + komentarze po polsku
 
 **Skill jest autorytatywnym opisem workflow — przeczytaj go przed generowaniem raportu.**
 
@@ -64,7 +78,7 @@ Wszystkie pliki `tweets-*.md` po polsku (poza nazwami własnymi i datami systemo
 **Zero znaków CJK w polskim tekście.** Modele wstawiają chińskie słowa w środek zdania (`潜在nie`, `warto密切关注`, `czy数据分析`) — znaleziono to w 10 raportach i naprawiono 2026-07-14. Sprawdź przed commitem:
 
 ```bash
-grep -P '[\x{4e00}-\x{9fff}]' output/tweets-$(date +%F).md   # musi nic nie zwrócić
+grep -P '[\x{4e00}-\x{9fff}]' output/tweets/$(date +%F).md   # musi nic nie zwrócić
 ```
 
 ## Deduplikacja i filtry

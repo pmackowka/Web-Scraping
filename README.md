@@ -21,10 +21,10 @@ python scrape.py                              # domyślne frazy i próg
 python scrape.py -q "AI" "MCP" -l 300         # własne frazy
 ```
 
-Wynik trafia do `output/`:
+Wynik trafia do `output/`, w dwóch podfolderach:
 
-- `raw-tweets-{YYYY-MM-DD}.md` — surowe dane po angielsku (etap 1)
-- `tweets-{YYYY-MM-DD}.md` — **raport końcowy**, po polsku, z komentarzami (etap 2, robi go agent)
+- `output/raw/{YYYY-MM-DD}.md` — surowe dane po angielsku (etap 1)
+- `output/tweets/{YYYY-MM-DD}.md` — **raport końcowy**, po polsku, z komentarzami (etap 2, robi go agent)
 
 ### Parametry `scrape.py`
 
@@ -36,7 +36,7 @@ Wynik trafia do `output/`:
 | `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (dokleja `since:` do zapytania), 0 wyłącza | 7 |
 
-> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw-tweets-{data}.md` — zostaje tylko ostatnia fraza.
+> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `output/raw/{data}.md` — zostaje tylko ostatnia fraza.
 
 **Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z list `EXCLUDE_WORDS` (UFO, alien itp.) i `AD_BAIT_PHRASES` (zakamuflowana reklama, np. „comment and I'll send you..."). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
 
@@ -68,7 +68,7 @@ Korzystając ze skilla `scraper` (/Users/p/Documents/dev/Web-Scraping/.claude/sk
 cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && python scrape.py
 ```
 
-Daje tylko surowy `raw-tweets-{data}.md` po angielsku — tłumaczenie i komentarze robi agent.
+Daje tylko surowy `output/raw/{data}.md` po angielsku — tłumaczenie i komentarze robi agent.
 
 ## Setup multi-agent (Claude Code / Codex / OpenCode)
 
