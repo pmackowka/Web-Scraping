@@ -21,9 +21,8 @@ except ImportError:
 load_dotenv()
 
 ACTOR_ID = "kaitoeasyapi/twitter-x-data-tweet-scraper-pay-per-result-cheapest"
-OUTPUT_DIR = Path(__file__).parent / "output"
-RAW_DIR = OUTPUT_DIR / "raw"
-RAW_DIR.mkdir(parents=True, exist_ok=True)
+RAW_DIR = Path(__file__).parent / "raw"
+RAW_DIR.mkdir(exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
 
 # Domyślne frazy — źródło prawdy opisane w .claude/CLAUDE.md ("Parametry kanoniczne")
