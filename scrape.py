@@ -61,6 +61,7 @@ AD_BAIT_PHRASES = [
     "link in bio",
     "worth bookmarking",
     "bookmark this before",
+    "quietly print money",
 ]
 
 
