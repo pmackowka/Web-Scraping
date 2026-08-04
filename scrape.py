@@ -4,6 +4,7 @@ Web Scraper - pobiera tweety z X (Twitter) używając Apify API.
 """
 
 import os
+import re
 import sys
 import json
 import argparse
@@ -24,6 +25,8 @@ ACTOR_ID = "kaitoeasyapi/twitter-x-data-tweet-scraper-pay-per-result-cheapest"
 RAW_DIR = Path(__file__).parent / "raw"
 RAW_DIR.mkdir(exist_ok=True)
 SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
+# Ile ID trzymamy w historii deduplikacji (~pół roku przy obecnym tempie)
+MAX_SEEN_IDS = 10000
 
 # Domyślne frazy — źródło prawdy opisane w .claude/CLAUDE.md ("Parametry kanoniczne")
 DEFAULT_KEYWORDS = ["Claude Code", "Codex", "n8n"]
@@ -39,29 +42,127 @@ EXCLUDE_WORDS = [
     "redstone arsenal",
 ]
 
-# Odrzuca zakamuflowaną reklamę (engagement bait) — wzorzec "wrzuć komentarz,
-# wyślę Ci szablon/skilla" typowy dla marketerów na X. Dosłowne frazy, jak
-# EXCLUDE_WORDS — łapie tylko najbardziej oczywiste przypadki, parafrazy
-# przechodzą dalej i muszą zostać złapane ręcznie w kroku 3 (patrz SKILL.md).
-AD_BAIT_PHRASES = [
-    "comment and i'll send",
-    "comment below and i'll",
-    "drop a comment and i'll",
-    "reply and i'll send",
-    "dm me and i'll send",
-    "dm me for the",
-    "dm me the word",
-    "i'll dm you the",
-    "i'll send you the",
-    "comment \"guide\"",
-    "comment 'guide'",
-    "comment \"template\"",
-    "comment 'template'",
-    "link in bio",
-    "worth bookmarking",
-    "bookmark this before",
-    "quietly print money",
+# --- Filtr treści bezużytecznych ---------------------------------------------
+#
+# Dwa poziomy zamiast jednej listy dosłownych fraz:
+#   HARD_REJECT_PATTERNS — pewniaki, skrypt wywala tweet bez pytania.
+#   SOFT_FLAG_PATTERNS   — poszlaki, tweet zostaje, ale dostaje ⚠️ w raw/.
+#
+# Powód rozdziału: "follow me for more" pojawiło się w wartościowym tweecie
+# o Taste Skill (2026-08-02) — twarde odrzucenie wycięłoby realną treść.
+# Sygnały jednoznaczne ("must follow so i can dm") takiego ryzyka nie mają.
+#
+# Regexy, nie dosłowne frazy — marketerzy wstawiają słowo-hasło w środek:
+# `reply "motion" and i'll send it over` nie pasowało do "reply and i'll send".
+
+# Pewna reklama / lead magnet — tweet nie trafia do raw/ w ogóle.
+HARD_REJECT_PATTERNS = [
+    # "rt + reply 'motion' and i'll send it over", "comment X and I'll dm you"
+    r"\b(reply|comment|rt|repost)\b[^.\n]{0,40}\b(and|then)\b[^.\n]{0,25}i'?ll\s+(send|dm|share|give|drop)",
+    # "must be following so i can dm" — najsilniejszy pojedynczy sygnał
+    r"\bmust\s+(be\s+)?follow(ing)?\b[^.\n]{0,40}\bdm\b",
+    r"\bi'?ll\s+(send|dm)\s+(you|it|them)\b[^.\n]{0,30}\b(over|the|link|guide|template|prompt)\b",
+    r"\bdm\s+me\s+(the\s+word|for\s+the|and\s+i)\b",
+    r"\bcomment\s+[\"']\w+[\"']\s*(and|below|to\s+get)\b",
+    r"\blink\s+in\s+bio\b",
+    # Job spam — ogłoszenia rekrutacyjne, zero treści technicznej
+    r"\b(is|are|we'?re)\s+hiring\b",
+    r"\b\d+\s+open\s+roles?\b",
+    r"\bapply\s+now\b",
 ]
+
+# Ucięty retweet: "RT @kto: początek treści…" — API zwraca urwaną treść,
+# raport z 2026-08-03 musiał to opisać jako "dalsza treść niedostępna".
+# Osobny warunek, nie regex: kropka w regexie nie przechodzi przez \n,
+# a wielokropek stoi w ostatniej linii, nie w tej z "RT @".
+_TRUNCATED_RT_RE = re.compile(r"^rt\s+@\w+:", re.IGNORECASE)
+
+# Poszlaki — pojedyncza nie dyskwalifikuje, dopiero kilka naraz (patrz niżej).
+SOFT_FLAG_PATTERNS = [
+    r"\bsave\s+this\s+(list|and|before|post|thread)\b",
+    r"\bsubscribe\s+to\s+my\b",
+    r"\bfollow\s+me\s+for\s+more\b",
+    r"\bbookmark\s+this\b",
+    r"\bworth\s+bookmarking\b",
+    r"\bquietly\s+print\s+money\b",
+    r"\b(share|repost)\s+(this|it)\s+(with|by|if)\b",
+    r"\bnever\s+hit\s+(usage\s+)?limits\b",
+    r"\bthree\s+dots,?\s+top\s+right\b",
+]
+
+# Sama liczba linków NIE świadczy o reklamie — backtest wyciął nią dwa dobre
+# wpisy (@Suryanshti777: 22 skille z repo GitHub, @andrew_n_carr: skille STE).
+# Liczy się dopiero w sumie z innymi poszlakami.
+MANY_LINKS = 6
+
+# Ile poszlak razem oznacza pewną reklamę. @rubenhassid miał cztery
+# (18 linków + "save this list" + "subscribe to my" + "share it with a friend"),
+# każdy wartościowy wpis z historii — najwyżej jedną.
+SOFT_SIGNALS_FOR_REJECT = 3
+
+_HARD_RE = [re.compile(p, re.IGNORECASE | re.MULTILINE) for p in HARD_REJECT_PATTERNS]
+_SOFT_RE = [re.compile(p, re.IGNORECASE | re.MULTILINE) for p in SOFT_FLAG_PATTERNS]
+_LINK_RE = re.compile(r"https?://t\.co/\w+")
+
+
+def normalize_text(text):
+    """Sprowadza apostrofy i cudzysłowy typograficzne do ASCII.
+
+    X zwraca U+2019 (’) zamiast ', więc wzorce z apostrofem ASCII nigdy
+    nie trafiały — w raw/2026-08-03.md było 7 takich znaków.
+    """
+    return (
+        text.replace("’", "'")
+        .replace("‘", "'")
+        .replace("“", '"')
+        .replace("”", '"')
+    )
+
+
+def classify_tweet(text, keyword, like_count, min_likes):
+    """Ocenia pojedynczy tweet.
+
+    Zwraca (werdykt, powód), gdzie werdykt to "ok", "flag" albo "reject".
+    Powód służy do logowania — bez niego nie da się kalibrować filtrów.
+    """
+    norm = normalize_text(text)
+    low = norm.lower()
+
+    if keyword.lower() not in low:
+        return "reject", "brak frazy w treści"
+
+    if like_count < min_likes:
+        return "reject", f"za mało polubień ({like_count} < {min_likes})"
+
+    for word in EXCLUDE_WORDS:
+        if word in low:
+            return "reject", f"spoza IT: '{word}'"
+
+    stripped = norm.strip()
+    if _TRUNCATED_RT_RE.match(stripped) and stripped.endswith("…"):
+        return "reject", "ucięty retweet (brak pełnej treści)"
+
+    for pattern in _HARD_RE:
+        match = pattern.search(low)
+        if match:
+            return "reject", f"reklama: '{match.group(0)[:45].strip()}'"
+
+    flags = []
+    link_count = len(_LINK_RE.findall(norm))
+    if link_count >= MANY_LINKS:
+        flags.append(f"{link_count} linków")
+    for pattern in _SOFT_RE:
+        match = pattern.search(low)
+        if match:
+            flags.append(f"'{match.group(0)[:30].strip()}'")
+
+    if len(flags) >= SOFT_SIGNALS_FOR_REJECT:
+        return "reject", f"reklama ({len(flags)} sygnały): " + "; ".join(flags[:3])
+
+    if flags:
+        return "flag", "; ".join(flags)
+
+    return "ok", ""
 
 
 def get_api_token():
@@ -85,19 +186,25 @@ def get_api_token():
 
 
 def load_seen_tweets():
-    """Wczytuje listę ID tweetów, które już widzieliśmy"""
+    """Wczytuje ID tweetów z poprzednich uruchomień (kolejność = wiek)."""
     if SEEN_TWEETS_FILE.exists():
         try:
-            return set(json.loads(SEEN_TWEETS_FILE.read_text(encoding="utf-8")))
+            return list(json.loads(SEEN_TWEETS_FILE.read_text(encoding="utf-8")))
         except Exception:
-            return set()
-    return set()
+            return []
+    return []
 
 
-def save_seen_tweets(seen_ids):
-    """Zapisuje listę ID tweetów do pliku"""
+def save_seen_tweets(old_ids, new_ids):
+    """Dopisuje nowe ID i przycina plik do MAX_SEEN_IDS najnowszych.
+
+    Bez limitu plik rósłby bez końca w każdym commicie. Obcięcie starych
+    jest bezpieczne: okno `since:` i tak nie sięga dalej niż kilka dni.
+    """
+    merged = [i for i in old_ids if i not in new_ids] + list(new_ids)
+    trimmed = merged[-MAX_SEEN_IDS:]
     try:
-        SEEN_TWEETS_FILE.write_text(json.dumps(list(seen_ids)), encoding="utf-8")
+        SEEN_TWEETS_FILE.write_text(json.dumps(trimmed), encoding="utf-8")
     except Exception as e:
         print(f"⚠️ Nie udało się zapisać seen_tweets.json: {e}")
 
@@ -137,22 +244,38 @@ def scrape_tweets(query, max_items=20, query_type="Top"):
         return []
 
 
-def filter_tweets(items, keyword, min_likes=20, exclude_words=None):
-    """Filtruje tweety zawierające keyword i mające min_likes polubień"""
+def filter_tweets(items, keyword, min_likes=20, verbose=True):
+    """Filtruje tweety przez classify_tweet i raportuje powody odrzuceń."""
     filtered = []
-    keyword_lower = keyword.lower()
+    rejected = []
 
     for item in items:
-        text = item.get("text", "")
-        text_lower = text.lower()
-        like_count = item.get("likeCount", 0)
+        verdict, reason = classify_tweet(
+            item.get("text", ""), keyword, item.get("likeCount", 0), min_likes
+        )
 
-        if keyword_lower in text_lower and like_count >= min_likes:
-            if exclude_words and any(excl in text_lower for excl in exclude_words):
-                continue
-            filtered.append(item)
+        if verdict == "reject":
+            rejected.append((item.get("author", {}).get("userName", "?"), reason))
+            continue
+
+        item["_bait_flag"] = reason if verdict == "flag" else ""
+        filtered.append(item)
 
     print(f"📝 Przefiltrowano: {len(filtered)}/{len(items)} tweetów spełnia kryteria (słowo: '{keyword}', min. {min_likes} ❤️)")
+
+    if verbose and rejected:
+        # Ciche odrzucenia uniemożliwiały ocenę, czy filtr działa czy przesadza
+        interesting = [(u, r) for u, r in rejected if not r.startswith(("brak frazy", "za mało"))]
+        skipped = len(rejected) - len(interesting)
+        for username, reason in interesting:
+            print(f"   🚫 @{username}: {reason}")
+        if skipped:
+            print(f"   · {skipped} odrzuconych na progu polubień / braku frazy")
+
+    flagged = [i for i in filtered if i.get("_bait_flag")]
+    for item in flagged:
+        print(f"   ⚠️  @{item.get('author', {}).get('userName', '?')}: {item['_bait_flag']}")
+
     return filtered
 
 
@@ -181,6 +304,9 @@ def format_to_markdown(items, keyword):
         md += f"❤️ Polubienia: {like_count} | "
         md += f"🔁 {retweet_count} | "
         md += f"👁 {view_count}\n\n"
+        # Poszlaka reklamy — agent w kroku 3 decyduje, czy wpis trafi do raportu
+        if item.get("_bait_flag"):
+            md += f"> ⚠️ **Możliwa reklama** ({item['_bait_flag']}) — oceń przed włączeniem do raportu.\n\n"
         md += f"{text}\n\n"
         if url:
             md += f"[Link do tweeta]({url})\n"
@@ -206,6 +332,8 @@ def main():
     parser.add_argument("-l", "--likes", type=int, default=400, help="Minimalna liczba polubień (default: 400)")
     parser.add_argument("-d", "--days", type=int, default=7,
                       help="Okno świeżości w dniach — dokleja 'since:' do zapytania, 0 wyłącza (default: 7)")
+    parser.add_argument("--no-api-filter", action="store_true",
+                      help="Nie doklejaj 'min_faves:' do zapytania (fallback, gdy X zwraca zbyt mało wyników)")
 
     args = parser.parse_args()
 
@@ -215,44 +343,56 @@ def main():
     all_markdown += f"*Data pobrania: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n\n"
 
     seen_ids = load_seen_tweets()
-    new_seen_ids = set()
+    seen_lookup = set(seen_ids)   # lista trzyma wiek, set daje szybkie "in"
+    new_seen_ids = []
     total_new = 0
 
     # Filtr świeżości: tryb Top bez daty zwraca stare viralowe tweety (płatne per result)
-    since_clause = ""
+    query_suffix = ""
     if args.days > 0:
         since_date = (datetime.now() - timedelta(days=args.days)).strftime("%Y-%m-%d")
-        since_clause = f" since:{since_date}"
+        query_suffix += f" since:{since_date}"
+
+    # Próg polubień po stronie X, nie po pobraniu — actor liczy za każdy zwrócony
+    # wynik, a bez tego ~60% puli odpadało dopiero w filter_tweets.
+    if args.likes > 0 and not args.no_api_filter:
+        query_suffix += f" min_faves:{args.likes}"
 
     for keyword in keywords:
-        items = scrape_tweets(f"{keyword}{since_clause}", args.max, args.type)
-        filtered = filter_tweets(items, keyword, args.likes, EXCLUDE_WORDS + AD_BAIT_PHRASES)
+        items = scrape_tweets(f"{keyword}{query_suffix}", args.max, args.type)
+        filtered = filter_tweets(items, keyword, args.likes)
 
         # Deduplikacja — tweet bez ID/URL przechodzi, ale nie trafia do seen
         unique_items = []
         for item in filtered:
             tweet_id = item.get("id") or item.get("url")
-            if tweet_id in seen_ids or tweet_id in new_seen_ids:
+            if tweet_id and tweet_id in seen_lookup:
                 continue
             unique_items.append(item)
             if tweet_id:
-                new_seen_ids.add(tweet_id)
+                new_seen_ids.append(tweet_id)
+                seen_lookup.add(tweet_id)
 
         total_new += len(unique_items)
         markdown = format_to_markdown(unique_items, keyword)
         all_markdown += markdown
 
-    if total_new == 0:
-        print("\nℹ️ Nie znaleziono żadnych nowych tweetów.")
-        # Opcjonalnie: można przerwać zapisywanie pustego pliku, 
-        # ale zostawmy to użytkownikowi do decyzji.
-        
     filename = f"{datetime.now().strftime('%Y-%m-%d')}.md"
     filepath = RAW_DIR / filename
+
+    # Pusty przebieg nie może skasować dorobku wcześniejszego uruchomienia
+    if total_new == 0:
+        print("\nℹ️ Nie znaleziono żadnych nowych tweetów.")
+        if filepath.exists():
+            print(f"   Zostawiam bez zmian: {filepath}")
+            return
+        print("   Nie tworzę pustego pliku.")
+        return
+
     save_to_file(all_markdown, filepath)
 
     # Zapisujemy nowe ID do pliku na przyszłość
-    save_seen_tweets(seen_ids.union(new_seen_ids))
+    save_seen_tweets(seen_ids, new_seen_ids)
 
     print(f"\n✅ Gotowe! Pobrano unikalnych: {total_new}. Wynik w: {filepath}")
 

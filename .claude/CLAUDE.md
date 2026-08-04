@@ -39,6 +39,7 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 | `-t` | `Top` lub `Latest` | Top |
 | `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (`since:` w zapytaniu), 0 wyłącza | 7 |
+| `--no-api-filter` | Nie doklejaj `min_faves:` do zapytania X | wyłączone |
 
 > **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw/{data}.md` — zostanie tylko ostatnia fraza.
 
@@ -82,10 +83,27 @@ grep -P '[\x{4e00}-\x{9fff}]' tweets/$(date +%F).md   # musi nic nie zwrócić
 
 ## Deduplikacja i filtry
 
-- `seen_tweets.json` przechowuje ID tweetów z poprzednich uruchomień. `.gitignore` blokuje `*.json`, ale ten plik jest tracked — nie dodawaj innych JSON-ów do repo.
-- `filter_tweets` wymaga **dosłownego** wystąpienia frazy w treści tweeta (case-insensitive) — świadoma decyzja: zero fałszywych pozytywów kosztem części trafień.
-- `EXCLUDE_WORDS` w `scrape.py` odrzuca tweety spoza IT. Nowy fałszywy pozytyw → dopisz frazę do listy.
-- `AD_BAIT_PHRASES` w `scrape.py` odrzuca zakamuflowaną reklamę (engagement bait, np. „comment and I'll send you..."). To tylko siatka na najbardziej oczywiste przypadki — marketerzy parafrazują, więc ostateczna weryfikacja i tak dzieje się ręcznie w kroku 3 skilla `scraper` (patrz `SKILL.md`).
+- `seen_tweets.json` przechowuje ID tweetów z poprzednich uruchomień, przycinane do `MAX_SEEN_IDS` (10 000) najnowszych. `.gitignore` blokuje `*.json`, ale ten plik jest tracked — nie dodawaj innych JSON-ów do repo.
+- Próg polubień leci **do zapytania X** jako `min_faves:` — actor liczy za każdy zwrócony wynik, więc filtrowanie przed pobraniem jest tańsze. `--no-api-filter` wyłącza, gdy X zwraca zbyt mało wyników.
+- `classify_tweet` wymaga **dosłownego** wystąpienia frazy w treści tweeta (case-insensitive) — świadoma decyzja: zero fałszywych pozytywów kosztem części trafień.
+- `EXCLUDE_WORDS` odrzuca tweety spoza IT. Nowy fałszywy pozytyw → dopisz frazę do listy.
+
+### Trzy werdykty zamiast listy fraz
+
+`classify_tweet` zwraca `ok` / `flag` / `reject`. Powód odrzucenia ląduje w logu — bez tego nie da się kalibrować filtrów.
+
+| Mechanizm | Działanie |
+|-----------|-----------|
+| `HARD_REJECT_PATTERNS` | Pewna reklama, job spam, `apply now`. Tweet nie trafia do `raw/` |
+| Ucięty retweet | `RT @kto: …` bez pełnej treści — odrzucany |
+| `SOFT_FLAG_PATTERNS` | Poszlaki. Tweet zostaje, dostaje ⚠️ w `raw/` do oceny agenta |
+| `SOFT_SIGNALS_FOR_REJECT` | **3+ poszlaki naraz** = pewna reklama → odrzucenie |
+
+**Regexy, nie dosłowne frazy** — marketerzy wstawiają słowo-hasło w środek: `reply "motion" and i'll send` nie pasowało do sztywnego `reply and i'll send`. Tekst przechodzi przez `normalize_text` (X zwraca apostrof `’`, nie `'` — wzorce ASCII bez tego nie trafiały).
+
+> **Liczba linków sama w sobie nie znaczy reklamy.** Backtest wyciął nią dwa wartościowe wpisy (22 skille do Claude Code, zestaw skilli STE — oba to listy repo GitHub). Liczy się dopiero razem z innymi poszlakami.
+
+Zmieniasz wzorce → puść backtest na `raw/` z historii: musi łapać znane reklamy i **nie ruszać** tweetów, które trafiły do `tweets/`.
 
 ## Auto-push do remote
 

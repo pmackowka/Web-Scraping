@@ -74,9 +74,10 @@ Przeczytaj `raw/{YYYY-MM-DD}.md` (data z kroku 1) i **utwórz nowy plik** `tweet
   ```bash
   grep -P '[\x{4e00}-\x{9fff}]' tweets/$(date +%F).md
   ```
-- **Weryfikacja treści**: mimo filtrów w skrypcie (`EXCLUDE_WORDS`, `AD_BAIT_PHRASES`) sprawdź każdy tweet ręcznie:
-  - cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń w raporcie.
-  - **Zakamuflowana reklama**: pomiń tweety, które łączą wyssane z palca/niepotwierdzone statystyki z wezwaniem do akcji typu „skomentuj X, a wyślę Ci szablon/skilla/przewodnika", „DM po dostęp", „link w bio". Regex w skrypcie łapie tylko dosłowne frazy — marketerzy parafrazują, więc oceniaj po wzorcu (teza brzmi jak lead magnet, nie jak realny insight), nie tylko po słowach kluczowych.
+- **Tweety oznaczone ⚠️**: skrypt wstawia do `raw/` blok `> ⚠️ **Możliwa reklama** (powód)` przy wpisach z poszlakami. **Twoja decyzja, nie automat** — oceń treść i albo pomiń tweet, albo włącz go do raportu. Sam znacznik ⚠️ i powód **nigdy nie trafiają do `tweets/`**.
+  - Pomijaj: lead magnet („skomentuj X, a wyślę Ci szablon", „DM po dostęp"), niepotwierdzone statystyki podparte wezwaniem do akcji, wpisy bez treści poza obietnicą.
+  - Zostawiaj: kuratorowane listy repo/skilli z konkretnymi nazwami i linkami — sama liczba linków to nie reklama. Podobnie „follow me for more" doklejone na końcu merytorycznego wpisu.
+- **Weryfikacja pozostałych**: filtry łapią wzorce, nie sens. Cokolwiek ewidentnie spoza IT (UFO, ezoteryka, pseudonauka) pomiń, nawet bez ⚠️.
 - **Jeden plik końcowy**: `tweets/{YYYY-MM-DD}.md`, nie twórz wielu raportów.
 - **Deduplikacja**: robi ją skrypt (`seen_tweets.json`) — nie filtruj ręcznie.
 

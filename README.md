@@ -35,10 +35,19 @@ Wynik trafia do dwóch folderów na poziomie roota repo:
 | `-t` | Typ wyników: `Top` lub `Latest` | Top |
 | `-l` | Minimalna liczba polubień | 400 |
 | `-d` | Okno świeżości w dniach (dokleja `since:` do zapytania), 0 wyłącza | 7 |
+| `--no-api-filter` | Nie doklejaj `min_faves:` do zapytania X (fallback przy zbyt małej liczbie wyników) | wyłączone |
 
-> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw/{data}.md` — zostaje tylko ostatnia fraza.
+> **Wszystkie frazy w jednym wywołaniu `-q`.** Osobne uruchomienia tego samego dnia nadpisują `raw/{data}.md` — zostaje tylko ostatnia fraza. Przebieg bez nowych tweetów **nie kasuje** istniejącego pliku.
 
-**Filtry:** skrypt odrzuca tweety bez dosłownego wystąpienia frazy w treści, poniżej progu polubień oraz zawierające frazy z list `EXCLUDE_WORDS` (UFO, alien itp.) i `AD_BAIT_PHRASES` (zakamuflowana reklama, np. „comment and I'll send you..."). Duplikaty odsiewa `seen_tweets.json` — ID tweetów ze wszystkich poprzednich uruchomień.
+**Filtry:** próg polubień trafia wprost do zapytania X (`min_faves:`), więc odpada koszt pobierania wyników, które i tak odpadną. Dalej `classify_tweet` przyznaje każdemu tweetowi jeden z trzech werdyktów:
+
+| Werdykt | Co się dzieje |
+|---------|---------------|
+| `reject` | Wypada z `raw/`. Reklama, job spam, brak frazy, ucięty retweet, treść spoza IT |
+| `flag` | Zostaje, ale dostaje `⚠️ Możliwa reklama` — agent ocenia w kroku 2 |
+| `ok` | Wchodzi bez adnotacji |
+
+Odrzucenia lądują w logu z powodem. Trzy poszlaki naraz (np. dużo linków + „save this list" + „subscribe to my") dają odrzucenie; pojedyncza tylko flagę — sama liczba linków nie świadczy o reklamie, bo kuratorowane listy repo są wartościowe. Duplikaty odsiewa `seen_tweets.json` (ostatnie 10 000 ID).
 
 ## 🚀 Gotowce — skopiuj, wklej, gotowe
 
