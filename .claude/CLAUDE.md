@@ -23,11 +23,11 @@ Uwaga: konfiguracja (uprawnienia, MCP) **nie jest** współdzielona między narz
 
 ## Parametry kanoniczne
 
-Trzy frazy, jedno wywołanie, próg 400 polubień:
+Trzy frazy, jedno wywołanie, próg 600 polubień:
 
 ```bash
 cd /Users/p/Documents/dev/Web-Scraping && source venv/bin/activate && \
-  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 400 -d 7
+  python scrape.py -q "Claude Code" "Codex" "n8n" -m 10 -t Top -l 600 -d 7
 ```
 
 To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje ten sam efekt. Jeśli zmieniasz frazy lub próg, zmień je **tutaj i w `scrape.py`**; skill i komenda odsyłają do tego pliku, nie powtarzają wartości.
@@ -37,7 +37,7 @@ To są też domyślne wartości w `scrape.py` — samo `python scrape.py` daje t
 | `-q` | Frazy (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex" "n8n"` |
 | `-m` | Maks. tweetów na frazę | 10 |
 | `-t` | `Top` lub `Latest` | Top |
-| `-l` | Minimalna liczba polubień | 400 |
+| `-l` | Minimalna liczba polubień | 600 |
 | `-d` | Okno świeżości w dniach (`since:` w zapytaniu), 0 wyłącza | 7 |
 | `--no-api-filter` | Nie doklejaj `min_faves:` do zapytania X | wyłączone |
 

@@ -33,7 +33,7 @@ Wynik trafia do dwóch folderów na poziomie roota repo:
 | `-q` | Frazy wyszukiwania (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex" "n8n"` |
 | `-m` | Maksymalna liczba tweetów na frazę | 10 |
 | `-t` | Typ wyników: `Top` lub `Latest` | Top |
-| `-l` | Minimalna liczba polubień | 400 |
+| `-l` | Minimalna liczba polubień | 600 |
 | `-d` | Okno świeżości w dniach (dokleja `since:` do zapytania), 0 wyłącza | 7 |
 | `--no-api-filter` | Nie doklejaj `min_faves:` do zapytania X (fallback przy zbyt małej liczbie wyników) | wyłączone |
 

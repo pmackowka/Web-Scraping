@@ -329,7 +329,7 @@ def main():
     parser.add_argument("-m", "--max", type=int, default=10, help="Maksymalna liczba tweetów na frazę (default: 10)")
     parser.add_argument("-t", "--type", default="Top", choices=["Top", "Latest"],
                       help="Typ wyszukiwania (default: Top)")
-    parser.add_argument("-l", "--likes", type=int, default=400, help="Minimalna liczba polubień (default: 400)")
+    parser.add_argument("-l", "--likes", type=int, default=600, help="Minimalna liczba polubień (default: 600)")
     parser.add_argument("-d", "--days", type=int, default=7,
                       help="Okno świeżości w dniach — dokleja 'since:' do zapytania, 0 wyłącza (default: 7)")
     parser.add_argument("--no-api-filter", action="store_true",
