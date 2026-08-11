@@ -30,7 +30,7 @@ Wynik trafia do dwóch folderów na poziomie roota repo:
 
 | Flaga | Opis | Domyślnie |
 |-------|------|-----------|
-| `-q` | Frazy wyszukiwania (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex" "n8n"` |
+| `-q` | Frazy wyszukiwania (wiele naraz, oddzielone spacją) | `"Claude Code" "Codex"` |
 | `-m` | Maksymalna liczba tweetów na frazę | 10 |
 | `-t` | Typ wyników: `Top` lub `Latest` | Top |
 | `-l` | Minimalna liczba polubień | 800 |

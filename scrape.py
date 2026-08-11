@@ -29,7 +29,7 @@ SEEN_TWEETS_FILE = Path(__file__).parent / "seen_tweets.json"
 MAX_SEEN_IDS = 10000
 
 # Domyślne frazy — źródło prawdy opisane w .claude/CLAUDE.md ("Parametry kanoniczne")
-DEFAULT_KEYWORDS = ["Claude Code", "Codex", "n8n"]
+DEFAULT_KEYWORDS = ["Claude Code", "Codex"]
 
 # Odrzuca tweety spoza kontekstu IT. Porównanie case-insensitive.
 # "disclosure" celowo usunięte — łapało security-tweety o responsible disclosure.
